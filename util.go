@@ -25,7 +25,7 @@ func (self *Int) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Int64 is a special type of integer that can unmarshall a JSON value of
+// Int64 is a special type of int64 that can unmarshall a JSON value of
 // "null", which cannot be parsed by the Go JSON parser as of Go v1.
 //
 // see http://code.google.com/p/go/issues/detail?id=2540
@@ -46,7 +46,7 @@ func (self *Int64) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Int64 is a special type of integer that can unmarshall a JSON value of
+// Bool is a special type of bool that can unmarshall a JSON value of
 // "null", which cannot be parsed by the Go JSON parser as of Go v1.
 //
 // see http://code.google.com/p/go/issues/detail?id=2540
