@@ -35,7 +35,7 @@ params := stripe.CustomerParams{
 	},
 }
 
-// Invoke the Customer Create function
+// Create the Customer via the Stripe REST API
 customer, err := stripe.Customers.Create(&params)
 ```
 
@@ -59,6 +59,19 @@ params := stripe.ChargeParams{
 	},
 }
 
-// Invoke the Charge Create function
+// Charge the Card via the Stripe REST API
 charge, err := stripe.Charges.Create(&params)
 ```
+
+## Unit Tests
+
+The unit tests include sample code for nearly every API call. They are your best resource until I have the opportunity to write more thorough documentation.
+
+In order to run your tests, you must have a Stripe account and a **Test** Secret Key. The Test Secret Key must be set in environment variable `STRIPE_API_KEY`:
+
+```sh
+export STRIPE_API_KEY="vtUQeOtUnYr7PGCLQ96Ul4zqpDUO4sOE"
+go test -v
+```
+
+The unit tests attempt to cleanup after themselves whenever possible. You can manually clear all test data from the Stripe console by navigating to: Your Account » Account Settings » Test Data. Then click the "Remove All Test Data" button.
