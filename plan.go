@@ -20,7 +20,7 @@ type Plan struct {
 	Name string `json:"name"`
 
 	// The amount in cents to be charged on the interval specified.
-	Amount int64  `json:"amount"`
+	Amount int64 `json:"amount"`
 
 	// One of month or year. The frequency with which a subscription should be
 	// billed.
@@ -129,9 +129,15 @@ func (self *PlanClient) ListN(count int, offset int) ([]*Plan, error) {
 	// define a wrapper function for the Plan List, so that we can
 	// cleanly parse the JSON
 	type listPlanResp struct{ Data []*Plan }
-
 	resp := listPlanResp{}
-	err := query("GET", "/v1/plans", nil, &resp)
+
+	// add the count and offset to the list of url values
+	values := url.Values{
+		"count":  {strconv.Itoa(count)},
+		"offset": {strconv.Itoa(offset)},
+	}
+
+	err := query("GET", "/v1/plans", values, &resp)
 	if err != nil {
 		return nil, err
 	}

@@ -102,9 +102,15 @@ func (self *CouponClient) ListN(count int, offset int) ([]*Coupon, error) {
 	// define a wrapper function for the Coupon List, so that we can
 	// cleanly parse the JSON
 	type listCouponResp struct{ Data []*Coupon }
-
 	resp := listCouponResp{}
-	err := query("GET", "/v1/coupons", nil, &resp)
+
+	// add the count and offset to the list of url values
+	values := url.Values{
+		"count":  {strconv.Itoa(count)},
+		"offset": {strconv.Itoa(offset)},
+	}
+
+	err := query("GET", "/v1/coupons", values, &resp)
 	if err != nil {
 		return nil, err
 	}

@@ -51,7 +51,7 @@ type Discount struct {
 	Id string `json:"id"`
 
 	// Customer's Unique Identifier that has received this discount.
-	Customer string  `json:"customer"`
+	Customer string `json:"customer"`
 
 	// Date that the coupon was applied
 	Start Int64 `json:"start"`
@@ -126,7 +126,7 @@ func (self *CustomerClient) Update(id string, c *CustomerParams) (*Customer, err
 	values := url.Values{}
 	appendCustomerParamsToValues(c, &values)
 
-	err := query("POST", "/v1/customers/"+ url.QueryEscape(id), values, &customer)
+	err := query("POST", "/v1/customers/"+url.QueryEscape(id), values, &customer)
 	return &customer, err
 }
 
@@ -150,15 +150,20 @@ func (self *CustomerClient) ListN(count int, offset int) ([]*Customer, error) {
 	// define a wrapper function for the Customer List, so that we can
 	// cleanly parse the JSON
 	type listCustomerResp struct{ Data []*Customer }
-
 	resp := listCustomerResp{}
-	err := query("GET", "/v1/customers", nil, &resp)
+
+	// add the count and offset to the list of url values
+	values := url.Values{
+		"count":  {strconv.Itoa(count)},
+		"offset": {strconv.Itoa(offset)},
+	}
+
+	err := query("GET", "/v1/customers", values, &resp)
 	if err != nil {
 		return nil, err
 	}
 	return resp.Data, nil
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Helper Function(s)

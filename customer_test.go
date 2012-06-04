@@ -17,8 +17,8 @@ func init() {
 var (
 	// Customer with only the required fields
 	cust1 = CustomerParams{
-		Email:   "test1@test.com",
-		Desc:    "a test customer",
+		Email: "test1@test.com",
+		Desc:  "a test customer",
 	}
 
 	// Customer with all required fields + required credit card fields.
@@ -27,18 +27,18 @@ var (
 		Desc:   "a 2nd test customer",
 		Coupon: c1.Id,
 		Plan:   p1.Id,
-		Card:   &CardParams {
-			Name     : "John Smith",
-			Number   : "4242424242424242",
-			ExpYear  : time.Now().Year()+1,
-			ExpMonth : 1,
+		Card: &CardParams{
+			Name:     "John Smith",
+			Number:   "4242424242424242",
+			ExpYear:  time.Now().Year() + 1,
+			ExpMonth: 1,
 		},
 	}
 
 	// Another Customer with only the required fields
 	cust3 = CustomerParams{
-		Email:   "test3@test.com",
-		Desc:    "a 3rd test customer",
+		Email: "test3@test.com",
+		Desc:  "a 3rd test customer",
 	}
 )
 
@@ -50,7 +50,6 @@ func TestCreateCustomer(t *testing.T) {
 	cust, err := Customers.Create(&cust1)
 	defer Customers.Delete(cust.Id)
 
-
 	if err != nil {
 		t.Errorf("Expected Customer, got Error %s", err.Error())
 	}
@@ -61,7 +60,6 @@ func TestCreateCustomer(t *testing.T) {
 		t.Errorf("Expected Customer Desc %s, got %s", cust1.Desc, cust.Desc)
 	}
 }
-
 
 // TestRetrieveCustomer will test that we can successfully Retrieve a Customer,
 // parse the JSON response, and that all values are populated as expected.
@@ -114,7 +112,6 @@ func TestRetrieveCustomer(t *testing.T) {
 	}
 }
 
-
 // TestUpdateCustomer will test that we can successfully update a Customer,
 // parse the JSON reponse, and verify the updated name was returned.
 func TestUpdateCustomer(t *testing.T) {
@@ -122,7 +119,7 @@ func TestUpdateCustomer(t *testing.T) {
 	resp, _ := Customers.Create(&cust1)
 	defer Customers.Delete(resp.Id)
 
-	cust, err := Customers.Update(resp.Id, &CustomerParams{ Email : "joe@email.com" })
+	cust, err := Customers.Update(resp.Id, &CustomerParams{Email: "joe@email.com"})
 	if err != nil {
 		t.Errorf("Expected Customer update, got Error %s", err.Error())
 	}
@@ -130,7 +127,6 @@ func TestUpdateCustomer(t *testing.T) {
 		t.Errorf("Expected Updated Customer Email")
 	}
 }
-
 
 // TestDeleteCustomer will test that we can successfully remove a Customer,
 // parse the JSON reponse, and that the deletion flag is captured as a boolean
@@ -146,7 +142,6 @@ func TestDeleteCustomer(t *testing.T) {
 		t.Errorf("Expected Customer deletion, got Error %s", err.Error())
 	}
 }
-
 
 // TestListCustomers will test that we can successfully retrieve a list of
 // Customers, parse the JSON reponse, and that the length of the coupon array
@@ -170,4 +165,3 @@ func TestListCustomers(t *testing.T) {
 		t.Errorf("Expected 2 Customers, got %s", len(customers))
 	}
 }
-
