@@ -27,8 +27,8 @@ var cards = []*card{
 
 func TestLuhn(t *testing.T) {
 	for _, card := range cards {
-		valid, _ := LuhnValid(card.Number)
-		cardType := CardType(card.Number)
+		valid, _ := IsLuhnValid(card.Number)
+		cardType := GetCardType(card.Number)
 
 		if valid != card.Valid {
 			t.Errorf("card validation [%v]; want [%v]", valid, card.Valid)

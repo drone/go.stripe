@@ -73,12 +73,12 @@ type CardParams struct {
 	AddressZip     string
 }
 
-// LuhnValid uses the Luhn Algorithm (also known as the Mod 10 algorithm) to
+// IsLuhnValid uses the Luhn Algorithm (also known as the Mod 10 algorithm) to
 // verify a credit cards checksum, which helps flag accidental data entry
 // errors.
 //
 // see http://en.wikipedia.org/wiki/Luhn_algorithm
-func LuhnValid(card string) (bool, error) {
+func IsLuhnValid(card string) (bool, error) {
 
 	var sum = 0
 	var digits = strings.Split(card, "")
@@ -110,10 +110,10 @@ func LuhnValid(card string) (bool, error) {
 	return sum%10 == 0, nil
 }
 
-// CardType is a simple algorithm to determine the Card Type (ie Visa, Discover)
-// based on the Credit Card Number. If the Number is not recognized, a value
-// of "Unknown" will be returned.
-func CardType(card string) string {
+// GetCardType is a simple algorithm to determine the Card Type (ie Visa,
+// Discover) based on the Credit Card Number. If the Number is not recognized, a
+// value of "Unknown" will be returned.
+func GetCardType(card string) string {
 
 	switch card[0:1] {
 	case "4":
