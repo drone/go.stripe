@@ -30,7 +30,7 @@ func TestLuhn(t *testing.T) {
 	for _, card := range cards {
 		valid, _ := LuhnValid(card.Number)
 		cardType := CardType(card.Number)
-		fmt.Println(cardType, "Credit Card [", card, "] Is Valid [", valid, "]")
+
 		if valid != card.Valid {
 			t.Errorf("card validation [%v]; want [%v]", valid, card.Valid)
 		}

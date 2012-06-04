@@ -3,7 +3,6 @@ package stripe
 import (
 	"strconv"
 	"strings"
-	"time"
 )
 
 // Credit Card Types accepted by the Stripe API.
@@ -59,11 +58,19 @@ type Card struct {
 	CVCCheck string `json:"cvc_check"`
 }
 
-// IsExpired checks to see if a card is expired based on the expiration year
-// and month.
-func (self *Card) IsExpired() bool {
-	return !(self.ExpYear >= time.Now().Year() &&
-		self.ExpMonth >= int(time.Now().Month()))
+// CardParams is a data structure that represents the required input parameters
+// for Creating and Updating Credit Card data in the system.
+type CardParams struct {
+	Name           string
+	Number         string
+	ExpMonth       int
+	ExpYear        int
+	CVC            string
+	Address1       string
+	Address2       string
+	AddressCountry string
+	AddressState   string
+	AddressZip     string
 }
 
 // LuhnValid uses the Luhn Algorithm (also known as the Mod 10 algorithm) to
