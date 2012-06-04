@@ -11,16 +11,3 @@ const (
 	CNY = "cny" // Chinese Yuan (CN¥)
 	AUD = "aud" // Australian Dollar (A$)
 )
-
-
-
-
-
-// Subscription Statuses
-const (
-	SubscriptionTrialing = "trialing"
-	SubscriptionActive   = "active"
-	SubscriptionPastDue  = "past_due"
-	SubscriptionCanceled = "canceled"
-	SubscriptionUnpaid   = "unpaid"
-)
