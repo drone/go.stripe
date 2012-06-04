@@ -1,5 +1,11 @@
 package stripe
 
+import (
+	"strconv"
+	"strings"
+	"time"
+)
+
 // Credit Card Types accepted by the Stripe API.
 const (
 	AmericanExpress = "American Express"
@@ -53,11 +59,12 @@ type Card struct {
 	CVCCheck string `json:"cvc_check"`
 }
 
-// TODO A common source of error is an invalid or expired card, or a
-// valid card with insufficient available balance.
-//func (self *Card) IsExpired() bool {
-//	return false
-//}
+// IsExpired checks to see if a card is expired based on the expiration year
+// and month.
+func (self *Card) IsExpired() bool {
+	return !(self.ExpYear >= time.Now().Year() &&
+		self.ExpMonth >= int(time.Now().Month()))
+}
 
 // LuhnValid uses the Luhn Algorithm (also known as the Mod 10 algorithm) to
 // verify a credit cards checksum, which helps flag accidental data entry
