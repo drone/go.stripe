@@ -32,7 +32,7 @@ type TokenParams struct {
 // see https://stripe.com/docs/api#create_token
 func (self *TokenClient) Create(params *TokenParams) (*Token, error) {
 	token := Token{}
-	values := url.Values{ "currency" : {params.Currency}}
+	values := url.Values{"currency": {params.Currency}}
 	appendCardParamsToValues(params.Card, &values)
 
 	err := query("POST", "/v1/tokens", values, &token)

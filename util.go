@@ -80,7 +80,7 @@ func (self *String) UnmarshalJSON(data []byte) error {
 	}
 
 	str, err := strconv.Unquote(str)
-	if err != nil  {
+	if err != nil {
 		return err
 	}
 
