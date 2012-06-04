@@ -12,10 +12,6 @@ import (
 	"strings"
 )
 
-var (
-	chargesPath   = "/v1/charges"
-)
-
 // the API Key used to authenticate all Stripe API requests
 var _key string
 
@@ -40,6 +36,7 @@ var (
 	Customers     = new(CustomerClient)
 	Plans         = new(PlanClient)
 	Subscriptions = new(SubscriptionClient)
+	Tokens        = new(TokenClient)
 )
 
 // SetKeyEnv retrieves the Stripe API key using the STRIPE_API_KEY
