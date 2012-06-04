@@ -15,22 +15,22 @@ func init() {
 // Sample Plans to use when creating, deleting, updating Plan data.
 var (
 	// Plan with only the required fields
-	p1 = CreatePlanReq {
-		Id : "plan1",
-		Name : "plan 1",
-		Amount : 1,
-		Currency : USD,
-		Interval : IntervalMonth,
+	p1 = CreatePlanReq{
+		Id:       "plan1",
+		Name:     "plan 1",
+		Amount:   1,
+		Currency: USD,
+		Interval: IntervalMonth,
 	}
 
 	// Plan with all required + optional fields.
-	p2 = CreatePlanReq {
-		Id : "plan9",
-		Name : "plan 9",
-		Amount : 9,
-		Currency : USD,
-		Interval : IntervalMonth,
-		TrialPeriodDays : 365,
+	p2 = CreatePlanReq{
+		Id:              "plan9",
+		Name:            "plan 9",
+		Amount:          9,
+		Currency:        USD,
+		Interval:        IntervalMonth,
+		TrialPeriodDays: 365,
 	}
 )
 
@@ -125,7 +125,7 @@ func TestUpdatePlan(t *testing.T) {
 	}
 	if plan.Name != "New Name" {
 		t.Errorf("Expected Updated Plan Name %v, got %v", p1.Name, plan.Name)
-	}	
+	}
 }
 
 // TestDeletePlan will test that we can successfully remove a Plan, parse

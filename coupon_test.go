@@ -15,18 +15,18 @@ func init() {
 // Sample Coupons to use when creating, deleting, updating Coupon data.
 var (
 	// Coupon with only the required fields
-	c1 = CreateCouponReq {
-		Id: "test coupon 1",
-		PercentOff: 5, 
-		Duration: DurationOnce,
+	c1 = CreateCouponReq{
+		Id:         "test coupon 1",
+		PercentOff: 5,
+		Duration:   DurationOnce,
 	}
 
 	// Coupon with all required + optional fields.
-	c2 = CreateCouponReq {
-		Id: "test coupon 2",
-		PercentOff: 10, 
-		Duration: DurationRepeating,
-		MaxRedemptions: 100,
+	c2 = CreateCouponReq{
+		Id:               "test coupon 2",
+		PercentOff:       10,
+		Duration:         DurationRepeating,
+		MaxRedemptions:   100,
 		DurationInMonths: 6,
 	}
 )
@@ -137,125 +137,3 @@ func TestListCoupon(t *testing.T) {
 		t.Errorf("Expected 2 Coupons, got %s", len(coupons))
 	}
 }
-
-
-
-
-
-
-
-
-
-
-var reqCreateCouponSuccess = `
-id=test+coupon+1&percent_off=10&duration=once&max_redemptions=5
-`
-
-var respCreateCouponSuccess = `{
-  "redeem_by": null,
-  "object": "coupon",
-  "id": "test coupon 1",
-  "livemode": false,
-  "duration": "once",
-  "times_redeemed": 0,
-  "max_redemptions": 5,
-  "duration_in_months": null,
-  "percent_off": 10
-}
-`
-
-// 400
-var respCreateCouponExists = `
-{
-  "error": {
-    "message": "Coupon already exists.",
-    "type": "invalid_request_error"
-  }
-}
-
-`
-
-// 200
-var respRetrieveCouponSuccess = `
-{
-  "duration": "once",
-  "duration_in_months": null,
-  "id": "test coupon 03",
-  "livemode": false,
-  "max_redemptions": 5,
-  "object": "coupon",
-  "percent_off": 10,
-  "redeem_by": null,
-  "times_redeemed": 0
-}
-`
-
-// 404
-var RetrieveCouponNotFound = `{
-  "error": {
-    "message": "No such coupon: test coupon 04xx",
-    "param": "id",
-    "type": "invalid_request_error"
-  }
-}`
-
-// 200
-var DeleteCouponSuccess = `
-body:  {
-  "deleted": true,
-  "id": "test coupon 1"
-}
-`
-
-// 404
-var DeleteCouponNotFound = `
-{
-  "error": {
-    "message": "No such coupon: test coupon 04",
-    "param": "id",
-    "type": "invalid_request_error"
-  }
-}
-`
-
-// 200
-var ListCoupons = `
-{
-  "count": 3,
-  "data": [
-    {
-      "duration": "once",
-      "object": "coupon",
-      "livemode": false,
-      "times_redeemed": 0,
-      "percent_off": 10,
-      "max_redemptions": 5,
-      "duration_in_months": null,
-      "redeem_by": null,
-      "id": "test coupon 03"
-    },
-    {
-      "duration": "once",
-      "object": "coupon",
-      "livemode": false,
-      "times_redeemed": 0,
-      "percent_off": 10,
-      "max_redemptions": 5,
-      "duration_in_months": null,
-      "redeem_by": null,
-      "id": "test coupon 02"
-    },
-    {
-      "duration": "once",
-      "object": "coupon",
-      "livemode": false,
-      "times_redeemed": 0,
-      "percent_off": 10,
-      "max_redemptions": null,
-      "duration_in_months": null,
-      "redeem_by": null,
-      "id": "test coupon 01"
-    }
-  ]
-}
-`

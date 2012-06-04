@@ -24,8 +24,7 @@ type Coupon struct {
 	Livemode         bool   `json:"livemode"`
 }
 
-type CouponClient struct { }
-
+type CouponClient struct{}
 
 // see https://stripe.com/docs/api?lang=java#create_coupon
 type CreateCouponReq struct {
@@ -41,8 +40,8 @@ type CreateCouponReq struct {
 func (self *CouponClient) Create(req *CreateCouponReq) (*Coupon, error) {
 	coupon := Coupon{}
 	values := url.Values{
-		"duration": { req.Duration },
-		"percent_off": { strconv.Itoa(req.PercentOff) },
+		"duration":    {req.Duration},
+		"percent_off": {strconv.Itoa(req.PercentOff)},
 	}
 
 	// coupon id is optional, add if specified
@@ -102,9 +101,9 @@ func (self *CouponClient) List() ([]*Coupon, error) {
 func (self *CouponClient) ListN(count int, offset int) ([]*Coupon, error) {
 	// define a wrapper function for the Coupon List, so that we can
 	// cleanly parse the JSON
-	type listCouponResp struct { Data []*Coupon }
+	type listCouponResp struct{ Data []*Coupon }
 
-	resp := listCouponResp{ }
+	resp := listCouponResp{}
 	err := query("GET", "/v1/coupons", nil, &resp)
 	if err != nil {
 		return nil, err

@@ -3,7 +3,7 @@ package stripe
 import (
 	"encoding/json"
 	"errors"
-//	"fmt"
+	//"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -13,8 +13,7 @@ import (
 )
 
 var (
-	chargesPath       = "/v1/charges"
-	customersPath     = "/v1/customers"
+	chargesPath   = "/v1/charges"
 )
 
 // the API Key used to authenticate all Stripe API requests
@@ -37,8 +36,9 @@ func SetKey(key string) {
 
 // Available APIs
 var (
-	Coupons = new(CouponClient)
-	Plans   = new(PlanClient)
+	Coupons       = new(CouponClient)
+	Customers     = new(CustomerClient)
+	Plans         = new(PlanClient)
 	Subscriptions = new(SubscriptionClient)
 )
 
@@ -69,10 +69,10 @@ func query(method, path string, values url.Values, v interface{}) error {
 	var reqBody io.Reader
 	if values != nil {
 		reqBody = strings.NewReader(values.Encode())
-	}	
+	}
 
-//fmt.Println("REQUEST: ", endpoint.String())
-//fmt.Println(values.Encode())
+	//fmt.Println("REQUEST: ", endpoint.String())
+	//fmt.Println(values.Encode())
 	// create the request
 	req, err := http.NewRequest(method, endpoint.String(), reqBody)
 	if err != nil {
@@ -91,8 +91,8 @@ func query(method, path string, values url.Values, v interface{}) error {
 	if err != nil {
 		return err
 	}
-//fmt.Println("RESPONSE: ", r.StatusCode)
-//fmt.Println(string(body))
+	//fmt.Println("RESPONSE: ", r.StatusCode)
+	//fmt.Println(string(body))
 	// is this an error?
 	if r.StatusCode != 200 {
 		error := Error{}
@@ -105,8 +105,8 @@ func query(method, path string, values url.Values, v interface{}) error {
 }
 
 type Error struct {
-	Code    int
-	Detail  struct {
+	Code   int
+	Detail struct {
 		Code    string `json:"code"`
 		Message string `json:"message"`
 		Param   string `json:"param"`

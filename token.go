@@ -11,8 +11,7 @@ type Token struct {
 	Livemode bool   "livemode"
 }
 
-
-type TokenClient struct { }
+type TokenClient struct{}
 
 // Creates a single use token that wraps the details of a credit card.
 // This token can be used in place of a credit card hash with any API method.

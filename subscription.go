@@ -5,6 +5,15 @@ import (
 	"strconv"
 )
 
+// Subscription Statuses
+const (
+	SubscriptionTrialing = "trialing"
+	SubscriptionActive   = "active"
+	SubscriptionPastDue  = "past_due"
+	SubscriptionCanceled = "canceled"
+	SubscriptionUnpaid   = "unpaid"
+)
+
 // see https://stripe.com/docs/api#subscription_object
 type Subscription struct {
 	Customer           string "custoer"
@@ -20,7 +29,7 @@ type Subscription struct {
 	CancelAtPeriodEnd  bool   "cancel_at_period_end" // If the subscription has been canceled with the at_period_end flag set to true, cancel_at_period_end on the subscription will be true. You can use this attribute to determine whether a subscription that has a status of active is scheduled to be canceled at the end of the current period.
 }
 
-type SubscriptionClient struct { }
+type SubscriptionClient struct{}
 
 type UpdateSubscriptionReq struct {
 	Plan     string // The identifier of the plan to subscribe the customer to.
@@ -38,7 +47,7 @@ type UpdateSubscriptionReq struct {
 //
 // see https://stripe.com/docs/api?lang=java#update_subscription
 func (self *SubscriptionClient) Update(customerId string, req *UpdateSubscriptionReq) (*Subscription, error) {
-	values := url.Values{ "plan": { req.Plan } }
+	values := url.Values{"plan": {req.Plan}}
 	if len(req.Coupon) != 0 {
 		values.Add("coupon", req.Coupon)
 	}
@@ -55,7 +64,6 @@ func (self *SubscriptionClient) Update(customerId string, req *UpdateSubscriptio
 	return &s, err
 }
 
-
 // Cancels the subscription if it exists. If you set the atPeriodEnd parameter
 // to true, the subscription will remain active until the end of the period, at
 // which point it will be cancelled and not renewed.
@@ -68,4 +76,3 @@ func (self *SubscriptionClient) Cancel(customerId string, atPeriodEnd bool) (*Su
 	err := query("DELETE", path, nil, &s)
 	return &s, err
 }
-
