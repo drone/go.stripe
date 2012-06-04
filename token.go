@@ -18,7 +18,7 @@ type Token struct {
 type TokenClient struct{}
 
 // TokenParams is a data structure that represents the required input parameters
-// for Creating and Credit Card Tokens in the system.
+// for Creating Credit Card Tokens in the system.
 type TokenParams struct {
 	Currency string
 	Card     *CardParams
