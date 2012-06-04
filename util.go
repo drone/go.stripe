@@ -66,3 +66,24 @@ func (self *Bool) UnmarshalJSON(data []byte) error {
 	*self = Bool(b)
 	return nil
 }
+
+// String is a special type of string that can unmarshall a JSON value of
+// "null", which cannot be parsed by the Go JSON parser as of Go v1.
+//
+// see http://code.google.com/p/go/issues/detail?id=2540
+type String string
+
+func (self *String) UnmarshalJSON(data []byte) error {
+	str := string(data)
+	if str == "null" {
+		return nil
+	}
+
+	str, err := strconv.Unquote(str)
+	if err != nil  {
+		return err
+	}
+
+	*self = String(str)
+	return nil
+}
