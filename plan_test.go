@@ -15,7 +15,7 @@ func init() {
 // Sample Plans to use when creating, deleting, updating Plan data.
 var (
 	// Plan with only the required fields
-	p1 = CreatePlanReq{
+	p1 = PlanParams{
 		Id:       "plan1",
 		Name:     "plan 1",
 		Amount:   1,
@@ -24,7 +24,7 @@ var (
 	}
 
 	// Plan with all required + optional fields.
-	p2 = CreatePlanReq{
+	p2 = PlanParams{
 		Id:              "plan9",
 		Name:            "plan 9",
 		Amount:          9,
@@ -71,7 +71,7 @@ func TestCreatePlan(t *testing.T) {
 	}
 
 	// Now use an invalid currency, which should throw an exception
-	var p3 CreatePlanReq
+	var p3 PlanParams
 	p3 = p1
 	p3.Currency = "XXX"
 	_, err = Plans.Create(&p3)
