@@ -14,26 +14,63 @@ const (
 
 // see https://stripe.com/docs/api#coupon_object
 type Coupon struct {
-	Id               string `json:"id"`
-	Duration         string `json:"duration"`                     // One of forever, once, and multi-month. Describes how long a customer who applies this coupon will get the discount. 
-	PercentOff       int    `json:"percent_off"`                  // Percent that will be taken off the subtotal of any invoices for this customer for the duration of the coupon. For example, a coupon with percent_off of 50 will make a $100 invoice $50 instead. 
-	DurationInMonths Int    `json:"duration_in_months,omitempty"` // If duration is multi-month, the number of months the coupon applies. Null if coupon duration is forever or once. 
-	MaxRedemptions   Int    `json:"max_redemptions,omitempty"`    // Maximum number of times this coupon can be redeemed by a customer before it is no longer valid. 
-	RedeemBy         Int64  `json:"redeem_by,omitempty"`          // Date after which the coupon can no longer be redeemed 
-	TimesRedeemed    int    `json:"times_redeemed,omitempty"`     // Number of times this coupon has been applied to a customer.
-	Livemode         bool   `json:"livemode"`
+	// Coupon's Unique Identifier in the system.
+	Id string `json:"id"`
+
+	// Describes how long a customer who applies this coupon will get the
+	// discount. Possible values are: forever, once, and repeating. 
+	Duration string `json:"duration"`
+
+	// Percent that will be taken off the subtotal of any invoices for this
+	// customer for the duration of the coupon. For example, a coupon with
+	// percent_off of 50 will make a $100 invoice $50 instead. 
+	PercentOff int `json:"percent_off"`
+
+	// If duration is repeating, the number of months the coupon applies. Null
+	// if coupon duration is forever or once. 
+	DurationInMonths Int `json:"duration_in_months,omitempty"`
+
+	// Maximum number of times this coupon can be redeemed by a customer before
+	// it is no longer valid. 
+	MaxRedemptions Int `json:"max_redemptions,omitempty"`
+
+	// Date after which the coupon can no longer be redeemed
+	RedeemBy Int64 `json:"redeem_by,omitempty"`
+
+	// Number of times this coupon has been applied to a customer.
+	TimesRedeemed int  `json:"times_redeemed,omitempty"`
+	Livemode      bool `json:"livemode"`
 }
 
 type CouponClient struct{}
 
 // see https://stripe.com/docs/api?lang=java#create_coupon
 type CreateCouponReq struct {
-	Id               string // Unique string of your choice that will be used to identify this coupon when applying it a customer. 
-	PercentOff       int    // A positive integer between 1 and 100 that represents the discount the coupon will apply.
-	Duration         string // Specifies how long the discount will be in effect. Can be forever, once, or repeating.
-	DurationInMonths int    // If duration is repeating, a positive integer that specifies the number of months the discount will be in effect.
-	MaxRedemptions   int    // A positive integer specifying the number of times the coupon can be redeemed before it's no longer valid. For example, you might have a 50% off coupon that the first 20 readers of your blog can use.
-	RedeemBy         int64  // UTC timestamp specifying the last time at which the coupon can be redeemed. After the redeem_by date, the coupon can no longer be applied to new customers.
+	// Unique string of your choice that will be used to identify this coupon
+	// when applying it a customer. 
+	Id string
+
+	// A positive integer between 1 and 100 that represents the discount the
+	// coupon will apply.
+	PercentOff int
+
+	// Specifies how long the discount will be in effect. Can be forever, once,
+	// or repeating.
+	Duration string
+
+	// If duration is repeating, a positive integer that specifies the number of
+	// months the discount will be in effect.
+	DurationInMonths int
+
+	// A positive integer specifying the number of times the coupon can be
+	// redeemed before it's no longer valid. For example, you might have a 50%
+	// off coupon that the first 20 readers of your blog can use.
+	MaxRedemptions int
+
+	// UTC timestamp specifying the last time at which the coupon can be
+	// redeemed. After the redeem_by date, the coupon can no longer be applied
+	// to new customers.
+	RedeemBy int64
 }
 
 // see https://stripe.com/docs/api?lang=java#create_coupon
