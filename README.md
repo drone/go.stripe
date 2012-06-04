@@ -6,10 +6,10 @@ a simple Credit Card processing library for Go using the Stripe API
 go get https://github.com/bradrydzewski/go.stripe
 ```
 
-Stripe API Documentation:
+Stripe API Documentation:<br/>
 https://stripe.com/docs/api
 
-Go Package Documentation:
+Go Package Documentation:<br/>
 http://gopkgdoc.appspot.com/pkg/github.com/bradrydzewski/go.stripe
 
 ## Examples
@@ -26,7 +26,7 @@ params := stripe.CustomerParams{
 	Desc:   "a 2nd test customer",
 	Coupon: c1.Id,
 	Plan:   p1.Id,
-	Card:   &CardParams {
+	Card:   &stripe.CardParams {
 		Name     : "John Smith",
 		Number   : "4242424242424242",
 		ExpYear  : time.Now().Year()+1,
@@ -35,6 +35,6 @@ params := stripe.CustomerParams{
 }
 
 // Invoke the Customer Create function
-customer, err := Customers.Create(&params)
+customer, err := stripe.Customers.Create(&params)
 ```
 
