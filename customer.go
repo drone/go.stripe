@@ -5,16 +5,16 @@ import (
 	"strconv"
 )
 
-// Customer objects 
+// Customer object
 //
 // see https://stripe.com/docs/api#customer_object
 type Customer struct {
 	// Customer's Unique Identifier within the Stripe database.
 	Id   string `json:"id"`
-	Desc string `json:"description"`
+	Desc string `json:"description,omitempty"`
 
 	// Customer's Email address
-	Email   string `json:"email"`
+	Email   string `json:"email,omitempty"`
 	Created int64  `json:"created"`
 
 	// Current balance, if any, being stored on the customer's account. If
@@ -27,17 +27,17 @@ type Customer struct {
 
 	// Whether or not the latest charge for the customer's latest invoice has
 	// failed.
-	Delinquent string `json:"delinquent"`
+	Delinquent bool `json:"delinquent"`
 
 	// Describes the active credit card for the customer, if there is one.
-	Card *Card `json:"active_card"`
+	Card *Card `json:"active_card,omitempty"`
 
 	// Describes the current discount active for the customer, if there is one.
-	Discount *Discount `json:"discount"`
+	Discount *Discount `json:"discount,omitempty"`
 
-	// Describes the current subscription on the customer, if there is one. If
+	// Describes the current subscription for the customer, if there is one. If
 	// the customer has no current subscription, this will be null.
-	Subscription *Subscription `json:"subscription"`
+	Subscription *Subscription `json:"subscription,omitempty"`
 
 	Livemode bool `json:"livemode"`
 }

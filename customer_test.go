@@ -1,0 +1,173 @@
+package stripe
+
+import (
+	"testing"
+	"time"
+)
+
+func init() {
+	// In order to execute Unit Test, you must set your Stripe API Key as
+	// environment variable, STRIPE_API_KEY=xxxx
+	if err := SetKeyEnv(); err != nil {
+		panic(err)
+	}
+}
+
+// Sample Customers to use when creating, deleting, updating Customer data.
+var (
+	// Customer with only the required fields
+	cust1 = CustomerParams{
+		Email:   "test1@test.com",
+		Desc:    "a test customer",
+	}
+
+	// Customer with all required fields + required credit card fields.
+	cust2 = CustomerParams{
+		Email:  "test2@test.com",
+		Desc:   "a 2nd test customer",
+		Coupon: c1.Id,
+		Plan:   p1.Id,
+		Card:   &CardParams {
+			Name     : "John Smith",
+			Number   : "4242424242424242",
+			ExpYear  : time.Now().Year()+1,
+			ExpMonth : 1,
+		},
+	}
+
+	// Another Customer with only the required fields
+	cust3 = CustomerParams{
+		Email:   "test3@test.com",
+		Desc:    "a 3rd test customer",
+	}
+)
+
+// TestCreateCustomer will test that we can successfully Create a Customer,
+// parse the JSON reponse from Stripe, and that all values are populated as
+// expected.
+func TestCreateCustomer(t *testing.T) {
+	// Create the customer, and defer its deletion
+	cust, err := Customers.Create(&cust1)
+	defer Customers.Delete(cust.Id)
+
+
+	if err != nil {
+		t.Errorf("Expected Customer, got Error %s", err.Error())
+	}
+	if cust.Email != cust1.Email {
+		t.Errorf("Expected Customer Email %s, got %s", cust1.Email, cust.Email)
+	}
+	if cust.Desc != cust1.Desc {
+		t.Errorf("Expected Customer Desc %s, got %s", cust1.Desc, cust.Desc)
+	}
+}
+
+
+// TestRetrieveCustomer will test that we can successfully Retrieve a Customer,
+// parse the JSON response, and that all values are populated as expected.
+func TestRetrieveCustomer(t *testing.T) {
+
+	// setup default plans and coupons, defer deletion
+	Plans.Create(&p1)
+	Coupons.Create(&c1)
+	defer Plans.Delete(p1.Id)
+	defer Coupons.Delete(c1.Id)
+
+	// Create the customer, and defer its deletion
+	resp, err := Customers.Create(&cust2)
+	defer Customers.Delete(resp.Id)
+	if err != nil {
+		t.Errorf("Expected Customer, got Error %s", err.Error())
+		return
+	}
+
+	// Retrieve the Customer by Id
+	cust, err := Customers.Retrieve(resp.Id)
+	if err != nil {
+		t.Errorf("Expected Customer, got Error %s", err.Error())
+	}
+	if cust.Email != cust2.Email {
+		t.Errorf("Expected Customer Email %s, got %s", cust2.Email, cust.Email)
+	}
+	if cust.Desc != cust2.Desc {
+		t.Errorf("Expected Customer Desc %s, got %s", cust2.Desc, cust.Desc)
+	}
+	if cust.Card == nil {
+		t.Errorf("Expected Credit Card %s, got nil", cust2.Card.Number)
+		return
+	}
+
+	if string(cust.Card.Name) != cust2.Card.Name {
+		t.Errorf("Expected Card Name %s, got %s", cust2.Card.Name, cust.Card.Name)
+	}
+	if cust.Card.Last4 != "4242" {
+		t.Errorf("Expected Card Last4 %d, got %d", "4242", cust.Card.Last4)
+	}
+	if cust.Card.ExpYear != cust2.Card.ExpYear {
+		t.Errorf("Expected Card ExpYear %d, got %d", cust2.Card.ExpYear, cust.Card.ExpYear)
+	}
+	if cust.Card.ExpMonth != cust2.Card.ExpMonth {
+		t.Errorf("Expected Card ExpMonth %d, got %d", cust2.Card.ExpMonth, cust.Card.ExpMonth)
+	}
+	if cust.Card.Type != Visa {
+		t.Errorf("Expected Card Type %s, got %s", Visa, cust.Card.Type)
+	}
+}
+
+
+// TestUpdateCustomer will test that we can successfully update a Customer,
+// parse the JSON reponse, and verify the updated name was returned.
+func TestUpdateCustomer(t *testing.T) {
+	// Create the Customer, and defer its deletion
+	resp, _ := Customers.Create(&cust1)
+	defer Customers.Delete(resp.Id)
+
+	cust, err := Customers.Update(resp.Id, &CustomerParams{ Email : "joe@email.com" })
+	if err != nil {
+		t.Errorf("Expected Customer update, got Error %s", err.Error())
+	}
+	if cust.Email != "joe@email.com" {
+		t.Errorf("Expected Updated Customer Email")
+	}
+}
+
+
+// TestDeleteCustomer will test that we can successfully remove a Customer,
+// parse the JSON reponse, and that the deletion flag is captured as a boolean
+// value.
+func TestDeleteCustomer(t *testing.T) {
+	// Create the Customer, and defer its deletion
+	resp, _ := Customers.Create(&cust1)
+	defer Customers.Delete(resp.Id)
+
+	// let's try to delete the customer
+	_, err := Customers.Delete(resp.Id)
+	if err != nil {
+		t.Errorf("Expected Customer deletion, got Error %s", err.Error())
+	}
+}
+
+
+// TestListCustomers will test that we can successfully retrieve a list of
+// Customers, parse the JSON reponse, and that the length of the coupon array
+// matches our expectations.
+func TestListCustomers(t *testing.T) {
+
+	// create 2 dummy customers that we can retrieve
+	resp1, _ := Customers.Create(&cust1)
+	resp2, _ := Customers.Create(&cust3)
+	defer Customers.Delete(resp1.Id)
+	defer Customers.Delete(resp2.Id)
+
+	// get the list from Stripe
+	customers, err := Customers.List()
+	if err != nil {
+		t.Errorf("Expected Customer List, got Error %s", err.Error())
+	}
+
+	// since we added 2 dummy customers, we expect the array to be a size of 2 
+	if len(customers) != 2 {
+		t.Errorf("Expected 2 Customers, got %s", len(customers))
+	}
+}
+

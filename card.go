@@ -20,14 +20,14 @@ type Card struct {
 	Id string `json:"id"`
 
 	// Cardholder name
-	Name string `json:"name"`
+	Name String `json:"name,omitempty"`
 
 	// Card brand. Can be Visa, American Express, MasterCard, Discover, JCB,
 	// Diners Club, or Unknown
 	Type     string `json:"type"`
 	ExpMonth int    `json:"exp_month"`
 	ExpYear  int    `json:"exp_year"`
-	Last4    int    `json:"last4"`
+	Last4    string `json:"last4"`
 
 	// Uniquely identifies this particular card number. You can use this
 	// attribute to check whether two customers who've signed up with you are
@@ -37,25 +37,25 @@ type Card struct {
 	// Two-letter ISO code representing the country of the card (as accurately
 	// as we can determine it). You could use this attribute to get a sense of
 	// the international breakdown of cards you've collected.
-	Country  string `json:"country"`
-	Address1 string `json:"address_line1"`
-	Address2 string `json:"address_line2"`
+	Country  String `json:"country,omitempty"`
+	Address1 String `json:"address_line1,omitempty"`
+	Address2 String `json:"address_line2,omitempty"`
 
 	// Billing address country, if provided when creating card
-	AddressCountry string `json:"address_country"`
-	AddressState   string `json:"address_state"`
-	AddressZip     string `json:"address_zip"`
+	AddressCountry String `json:"address_country,omitempty"`
+	AddressState   String `json:"address_state,omitempty"`
+	AddressZip     String `json:"address_zip,omitempty"`
 
 	// If address_line1 was provided, results of the check: pass, fail,
 	// or unchecked.
-	AddressLine1Check string `json:"address_line1_check"`
+	AddressLine1Check String `json:"address_line1_check,omitempty"`
 
 	// If address_zip was provided, results of the check: pass, fail, or
 	// unchecked.
-	AddressZipCheck string `json:"address_zip_check"`
+	AddressZipCheck String `json:"address_zip_check,omitempty"`
 
 	// If a CVC was provided, results of the check: pass, fail, or unchecked.
-	CVCCheck string `json:"cvc_check"`
+	CVCCheck String `json:"cvc_check,omitempty"`
 }
 
 // CardParams is a data structure that represents the required input parameters
