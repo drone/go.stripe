@@ -22,15 +22,16 @@ stripe.SetKey("vtUQeOtUnYr7PGCLQ96Ul4zqpDUO4sOE")
 
 // define the Customer
 params := stripe.CustomerParams{
-	Email:  "test2@test.com",
-	Desc:   "a 2nd test customer",
+	Email:  "george.costanza@mail.com",
+	Desc:   "short, bald",
 	Coupon: c1.Id,
 	Plan:   p1.Id,
 	Card:   &stripe.CardParams {
-		Name     : "John Smith",
+		Name     : "George Costanza",
 		Number   : "4242424242424242",
-		ExpYear  : time.Now().Year()+1,
-		ExpMonth : 1,
+		ExpYear  : 2012,
+		ExpMonth : 5,
+		CVC      : "26726",
 	},
 }
 
@@ -38,3 +39,26 @@ params := stripe.CustomerParams{
 customer, err := stripe.Customers.Create(&params)
 ```
 
+### Create Charge
+
+```go
+// set your API key from environment (an alternative to hard-coding)
+stripe.SetKeyEnv()
+
+// setup the charge for $4.00 (expressed as 400 cents)
+params := stripe.ChargeParams{
+	Desc:     "Calzone",
+	Amount:   400,
+	Currency: "usd",
+	Card:     &stripe.CardParams {
+		Name     : "George Costanza",
+		Number   : "4242424242424242",
+		ExpYear  : 2012,
+		ExpMonth : 5,
+		CVC      : "26726",
+	},
+}
+
+// Invoke the Charge Create function
+charge, err := stripe.Charges.Create(&params)
+```

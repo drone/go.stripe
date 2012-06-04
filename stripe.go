@@ -32,6 +32,7 @@ func SetKey(key string) {
 
 // Available APIs
 var (
+	Charges       = new(ChargeClient)
 	Coupons       = new(CouponClient)
 	Customers     = new(CustomerClient)
 	Plans         = new(PlanClient)
@@ -62,9 +63,14 @@ func query(method, path string, values url.Values, v interface{}) error {
 	endpoint.Path = path
 	endpoint.User = url.User(_key)
 
-	// create the request body, if form values are provided
+	// if this is an http GET, add the url.Values to the endpoint
+	if method == "GET" {
+		endpoint.RawQuery = values.Encode()
+	}
+
+	// else if this is not a GET, encode the url.Values in the body.
 	var reqBody io.Reader
-	if values != nil {
+	if method != "GET" && values != nil {
 		reqBody = strings.NewReader(values.Encode())
 	}
 
