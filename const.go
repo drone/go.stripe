@@ -1,16 +1,5 @@
 package stripe
 
-// Credit Card Types accepted by the Stripe API.
-const (
-	AmericanExpress = "American Express"
-	DinersClub      = "Diners Club"
-	Discover        = "Discover"
-	JCB             = "JCB"
-	MasterCard      = "MasterCard"
-	Visa            = "Visa"
-	UnknownCard     = "Unknown"
-)
-
 // ISO 3-digit Currency Codes for major currencies (not the full list).
 const (
 	USD = "usd" // US Dollar ($)
