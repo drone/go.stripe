@@ -82,7 +82,7 @@ func (self *CouponClient) Create(req *CreateCouponReq) (*Coupon, error) {
 	}
 
 	// coupon id is optional, add if specified
-	if req.Id != "" {
+	if len(req.Id) != 0 {
 		values.Add("id", req.Id)
 	}
 
