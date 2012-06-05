@@ -56,6 +56,55 @@ func TestCreateCharge(t *testing.T) {
 	}
 }
 
+// TestCreateChargeToken attempts to charge using a Card Token.
+func TestCreateChargeToken(t *testing.T) {
+
+	// Create a Token for the credit card
+	token, _ := Tokens.Create(&token1)
+
+	// Create a Charge that uses a Token
+	charge := ChargeParams{
+		Desc:     "Calzone",
+		Amount:   400,
+		Currency: USD,
+		Token:    token.Id,
+	}
+
+	// Create the charge
+	_, err := Charges.Create(&charge)
+	if err != nil {
+		t.Errorf("Expected Successful Charge, got Error %s", err.Error())
+	}
+}
+
+// TestCreateChargeCustomer attempts to charge a pre-defined customer, meaning
+// we don't specify the credit card or token when Creating the charge.
+func TestCreateChargeCustomer(t *testing.T) {
+
+	// Create a Customer and defer deletion
+	// This customer should have a credit card setup
+	cust, _ := Customers.Create(&cust4)
+	defer Customers.Delete(cust.Id)
+	if cust.Card == nil {
+		t.Errorf("Cannot test charging a customer with no pre-defined Card")
+		return
+	}
+
+	// Create a Charge that uses a Token
+	charge := ChargeParams{
+		Desc:     "Calzone",
+		Amount:   400,
+		Currency: USD,
+		Customer: cust.Id,
+	}
+
+	// Create the charge
+	_, err := Charges.Create(&charge)
+	if err != nil {
+		t.Errorf("Expected Successful Charge, got Error %s", err.Error())
+	}
+}
+
 func TestRetrieveCharge(t *testing.T) {
 	// Create the charge
 	resp, err := Charges.Create(&charge1)

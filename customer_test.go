@@ -40,6 +40,18 @@ var (
 		Email: "test3@test.com",
 		Desc:  "a 3rd test customer",
 	}
+
+	// A customer with the required fields + a credit card
+	cust4 = CustomerParams{
+		Email: "test3@test.com",
+		Desc:  "a 3rd test customer",
+		Card: &CardParams{
+			Name:     "John Smith",
+			Number:   "4242424242424242",
+			ExpYear:  time.Now().Year() + 1,
+			ExpMonth: 1,
+		},
+	}
 )
 
 // TestCreateCustomer will test that we can successfully Create a Customer,
