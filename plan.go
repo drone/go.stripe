@@ -17,26 +17,13 @@ const (
 //
 // see https://stripe.com/docs/api#plan_object
 type Plan struct {
-	// Unique Identifier for this Plan.
-	Id string `json:"id"`
-
-	// Name of this Plan.
-	Name string `json:"name"`
-
-	// The amount in cents to be charged on the interval specified.
-	Amount int64 `json:"amount"`
-
-	// One of month or year. The frequency with which a subscription should be
-	// billed.
-	Interval string `json:"interval"`
-
-	// Currency in which subscription will be charged
-	Currency string `json:"currency"`
-
-	// Number of trial period days granted when subscribing a customer to this
-	// plan. Null if the plan has no trial period.
-	TrialPeriodDays Int  `json:"trial_period_days"`
-	Livemode        bool `json:"livemode"`
+	Id              string `json:"id"`
+	Name            string `json:"name"`
+	Amount          int64  `json:"amount"`
+	Interval        string `json:"interval"`
+	Currency        string `json:"currency"`
+	TrialPeriodDays Int    `json:"trial_period_days"`
+	Livemode        bool   `json:"livemode"`
 }
 
 // PlanClient encapsulates operations for creating, updating, deleting and

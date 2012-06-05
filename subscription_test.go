@@ -18,15 +18,15 @@ var (
 
 	// Subscriptions with only the required fields
 	sub1 = SubscriptionParams{
-		Plan : "plan1",
+		Plan: "plan1",
 	}
 
 	// Subscriptions with all fields, plus new Credit Card
 	sub2 = SubscriptionParams{
-		Plan : "plan1",
-		Coupon : "test coupon 1",
-		Prorate : true,
-		TrialEnd : time.Now().Unix() + 1000000,
+		Plan:     "plan1",
+		Coupon:   "test coupon 1",
+		Prorate:  true,
+		TrialEnd: time.Now().Unix() + 1000000,
 		Card: &CardParams{
 			Name:     "George Costanza",
 			Number:   "4242424242424242",
@@ -106,7 +106,7 @@ func TestUpdateSubscriptionToken(t *testing.T) {
 	token, _ := Tokens.Create(&token1)
 
 	// Subscribe the Customer to the Plan, using the Token
-	params := SubscriptionParams{ Plan: "plan1", Token: token.Id }
+	params := SubscriptionParams{Plan: "plan1", Token: token.Id}
 	_, err := Subscriptions.Update(cust.Id, &params)
 	if err != nil {
 		t.Errorf("Expected Subscription with Token, got error %s", err.Error())

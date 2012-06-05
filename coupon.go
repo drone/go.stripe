@@ -16,32 +16,14 @@ const (
 //
 // see https://stripe.com/docs/api#coupon_object
 type Coupon struct {
-	// Unique Identifier for this Coupon
-	Id string `json:"id"`
-
-	// Describes how long a customer who applies this coupon will get the
-	// discount. Possible values are: forever, once, and repeating. 
-	Duration string `json:"duration"`
-
-	// Percent that will be taken off the subtotal of any invoices for this
-	// customer for the duration of the coupon. For example, a coupon with
-	// percent_off of 50 will make a $100 invoice $50 instead. 
-	PercentOff int `json:"percent_off"`
-
-	// If duration is repeating, the number of months the coupon applies. Null
-	// if coupon duration is forever or once. 
-	DurationInMonths Int `json:"duration_in_months,omitempty"`
-
-	// Maximum number of times this coupon can be redeemed by a customer before
-	// it is no longer valid. 
-	MaxRedemptions Int `json:"max_redemptions,omitempty"`
-
-	// Date after which the coupon can no longer be redeemed
-	RedeemBy Int64 `json:"redeem_by,omitempty"`
-
-	// Number of times this coupon has been applied to a customer.
-	TimesRedeemed int  `json:"times_redeemed,omitempty"`
-	Livemode      bool `json:"livemode"`
+	Id               string `json:"id"`
+	Duration         string `json:"duration"`
+	PercentOff       int    `json:"percent_off"`
+	DurationInMonths Int    `json:"duration_in_months,omitempty"`
+	MaxRedemptions   Int    `json:"max_redemptions,omitempty"`
+	RedeemBy         Int64  `json:"redeem_by,omitempty"`
+	TimesRedeemed    int    `json:"times_redeemed,omitempty"`
+	Livemode         bool   `json:"livemode"`
 }
 
 // CouponClient encapsulates operations for creating, updating, deleting and
