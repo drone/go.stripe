@@ -45,7 +45,7 @@ type Coupon struct {
 type CouponClient struct{}
 
 // see https://stripe.com/docs/api?lang=java#create_coupon
-type CreateCouponReq struct {
+type CouponParams struct {
 	// Unique string of your choice that will be used to identify this coupon
 	// when applying it a customer. 
 	Id string
@@ -74,31 +74,31 @@ type CreateCouponReq struct {
 }
 
 // see https://stripe.com/docs/api?lang=java#create_coupon
-func (self *CouponClient) Create(req *CreateCouponReq) (*Coupon, error) {
+func (self *CouponClient) Create(params *CouponParams) (*Coupon, error) {
 	coupon := Coupon{}
 	values := url.Values{
-		"duration":    {req.Duration},
-		"percent_off": {strconv.Itoa(req.PercentOff)},
+		"duration":    {params.Duration},
+		"percent_off": {strconv.Itoa(params.PercentOff)},
 	}
 
 	// coupon id is optional, add if specified
-	if len(req.Id) != 0 {
-		values.Add("id", req.Id)
+	if len(params.Id) != 0 {
+		values.Add("id", params.Id)
 	}
 
 	// duration in months is optional, add if specified
-	if req.DurationInMonths != 0 {
-		values.Add("duration_in_months", strconv.Itoa(req.DurationInMonths))
+	if params.DurationInMonths != 0 {
+		values.Add("duration_in_months", strconv.Itoa(params.DurationInMonths))
 	}
 
 	// max_redemptions is optional, add if specified
-	if req.MaxRedemptions != 0 {
-		values.Add("max_redemptions", strconv.Itoa(req.MaxRedemptions))
+	if params.MaxRedemptions != 0 {
+		values.Add("max_redemptions", strconv.Itoa(params.MaxRedemptions))
 	}
 
 	// redeem_by is optional, add if specified
-	if req.RedeemBy != 0 {
-		values.Add("redeem_by", strconv.FormatInt(req.RedeemBy, 10))
+	if params.RedeemBy != 0 {
+		values.Add("redeem_by", strconv.FormatInt(params.RedeemBy, 10))
 	}
 	err := query("POST", "/v1/coupons", values, &coupon)
 	return &coupon, err

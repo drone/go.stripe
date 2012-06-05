@@ -15,14 +15,14 @@ func init() {
 // Sample Coupons to use when creating, deleting, updating Coupon data.
 var (
 	// Coupon with only the required fields
-	c1 = CreateCouponReq{
+	c1 = CouponParams{
 		Id:         "test coupon 1",
 		PercentOff: 5,
 		Duration:   DurationOnce,
 	}
 
 	// Coupon with all required + optional fields.
-	c2 = CreateCouponReq{
+	c2 = CouponParams{
 		Id:               "test coupon 2",
 		PercentOff:       10,
 		Duration:         DurationRepeating,
