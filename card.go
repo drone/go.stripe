@@ -16,7 +16,9 @@ const (
 	UnknownCard     = "Unknown"
 )
 
+// Card represents details about a Credit Card entered into Stripe.
 type Card struct {
+	// Unique Identifier for this Card
 	Id string `json:"id"`
 
 	// Cardholder name
@@ -58,8 +60,7 @@ type Card struct {
 	CVCCheck String `json:"cvc_check,omitempty"`
 }
 
-// CardParams is a data structure that represents the required input parameters
-// for Creating and Updating Credit Card data in the system.
+// CardParams encapsulates options for Creating or Updating Credit Cards.
 type CardParams struct {
 	Name           string
 	Number         string
