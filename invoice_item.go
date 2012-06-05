@@ -5,6 +5,9 @@ import (
 	"strconv"
 )
 
+// InvoiceItem represents a charge (or credit) that should be applied to the
+// customer at the end of a billing cycle.
+//
 // see https://stripe.com/docs/api#invoiceitem_object
 type InvoiceItem struct {
 	Id       string `json:"id"`
@@ -17,8 +20,7 @@ type InvoiceItem struct {
 	Livemode bool   `json:"livemode"`
 }
 
-// InvoiceItemParams is a data structure that represents the required input
-// parameters for Creating and Updating Invoice Items in the system.
+// InvoiceItemParams encapsulates options for creating a new Invoice Items.
 type InvoiceItemParams struct {
 	// The ID of the customer who will be billed when this invoice item is
 	// billed.
@@ -32,21 +34,18 @@ type InvoiceItemParams struct {
 	// 3-letter ISO code for currency. Currently, only 'usd' is supported.
 	Currency string
 
-	// An arbitrary string which you can attach to the invoice item. The
-	// description is displayed in the invoice for easy tracking.
+	// (Optional) An arbitrary string which you can attach to the invoice item.
+	// The description is displayed in the invoice for easy tracking.
 	Desc string
 
-	// The ID of an existing invoice to add this invoice item to. When left
-	// blank, the invoice item will be added to the next upcoming scheduled
-	// invoice.
-	// 
-	// You cannot add an invoice item to an invoice that has already been paid
-	// or closed.
+	// (Optional) The ID of an existing invoice to add this invoice item to.
+	// When left blank, the invoice item will be added to the next upcoming
+	// scheduled invoice.
 	Invoice string
 }
 
-// InvoiceItemClient provides an API for Creating, Updating, Removing and
-// Querying Stripe Invoice Items.
+// InvoiceItemClient encapsulates operations for creating, updating, deleting
+// and querying invoices using the Stripe REST API.
 type InvoiceItemClient struct{}
 
 // Create adds an arbitrary charge or credit to the customer's upcoming invoice.
@@ -72,7 +71,7 @@ func (self *InvoiceItemClient) Create(params *InvoiceItemParams) (*InvoiceItem, 
 	return &item, err
 }
 
-// Retrieves the invoice item with the given ID.
+// Retrieves the Invoice Item with the given ID.
 //
 // see https://stripe.com/docs/api#retrieve_invoiceitem
 func (self *InvoiceItemClient) Retrieve(id string) (*InvoiceItem, error) {
@@ -82,8 +81,8 @@ func (self *InvoiceItemClient) Retrieve(id string) (*InvoiceItem, error) {
 	return &item, err
 }
 
-// Update changes the amount or description of an invoice item on an upcoming
-// invoice, using the specified invoice item id.
+// Update changes the amount or description of an Invoice Item on an upcoming
+// invoice, using the given Invoice Item ID.
 //
 // see https://stripe.com/docs/api#update_invoiceitem
 func (self *InvoiceItemClient) Update(id string, params *InvoiceItemParams) (*InvoiceItem, error) {
@@ -101,8 +100,7 @@ func (self *InvoiceItemClient) Update(id string, params *InvoiceItemParams) (*In
 	return &item, err
 }
 
-// Removes an invoice item from the upcoming invoice. Removing an invoice item
-// is only possible before the invoice it's attached to is closed.
+// Removes an Invoice Item with the given ID.
 // 
 // see https://stripe.com/docs/api#delete_invoiceitem
 func (self *InvoiceItemClient) Delete(id string) (*InvoiceItem, error) {
@@ -112,34 +110,29 @@ func (self *InvoiceItemClient) Delete(id string) (*InvoiceItem, error) {
 	return &item, err
 }
 
-// ListN returns a list of invoice items across all customers using the Stripe API's
-// default range (count 10, offset 0). The items are returned in sorted order,
-// with the most recent items appearing first.
+// Returns a list of Invoice Items.
 //
 // see https://stripe.com/docs/api#list_invoiceitems
 func (self *InvoiceItemClient) List() ([]*InvoiceItem, error) {
 	return self.list("", 10, 0)
 }
 
-// ListN returns a list of invoice items across all customers using the specified
-// range. The items are returned in sorted order, with the most recent items
-// appearing first.
+// Returns a list of Invoice Items at the specified range.
 //
 // see https://stripe.com/docs/api#list_invoiceitems
 func (self *InvoiceItemClient) ListN(count int, offset int) ([]*InvoiceItem, error) {
 	return self.list("", count, offset)
 }
 
-// CustomerList returns a list of invoice items for the specified customer id
-// using the Stripe API's default range (count 10, offset 0)
+// Returns a list of Invoice Items for the specified Customer ID.
 //
 // see https://stripe.com/docs/api#list_invoiceitems
 func (self *InvoiceItemClient) CustomerList(id string) ([]*InvoiceItem, error) {
 	return self.list(id, 10, 0)
 }
 
-// CustomerListN returns a list of invoice items for the specified customer id,
-// range, and count.
+// Returns a list of Invoice Items for the specified Customer ID, at the
+// specified range.
 //
 // see https://stripe.com/docs/api#list_invoiceitems
 func (self *InvoiceItemClient) CustomerListN(id string, count int, offset int) ([]*InvoiceItem, error) {

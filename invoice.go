@@ -5,70 +5,34 @@ import (
 	"strconv"
 )
 
+// Invoice represents statements of what a customer owes for a particular
+// billing period, including subscriptions, invoice items, and any automatic
+// proration adjustments if necessary.
+//
 // see https://stripe.com/docs/api#invoice_object
 type Invoice struct {
-	// Unique Identifier for this Invoice.
-	Id string `json:"id"`
-
-	// Final amount due at this time for this invoice. If the invoice's total is
-	// smaller than the minimum charge amount, for example, or if there is an
-	// account credit that can be applied to the invoice, the amount_due may be
-	// zero.
-	AmountDue int64 `json:"amount_due"`
-
-	// Number of automatic payment attempts made for this invoice. Does not
-	// include manual attempts to pay the invoice.
-	AttemptCount int `json:"attempt_count"`
-
-	// Whether or not an attempt has been made to pay the invoice.
-	Attempted bool `json:"attempted"`
-
-	// Whether or not the invoice is still trying to collect payment.
-	Closed bool `json:"closed"`
-
-	// Whether or not payment was successfully collected for this invoice.
-	Paid bool `json:"paid"`
-
-	// End of the usage period the invoice covers .
-	PeriodEnd int64 `json:"period_end"`
-
-	// Start of the usage period the invoice covers
-	PeriodStart int64 `json:"period_start"`
-
-	// Total of all subscriptions, invoice items, and prorations on the invoice
-	// before any discount is applied
-	Subtotal int64 `json:"subtotal"`
-
-	// Total after discounts.
-	Total int64 `json:"total"`
-
-	// ID of the latest charge generated for this invoice, if any.
-	Charge String `json:"charge"`
-
-	// Customer Identifier linked to this Invoice.
-	Customer string `json:"closed"`
-
-	Date int64 `json:"date"`
-
-	// Discount that was applied to this Invoice.
-	Discount *Discount `json:"discount"`
-
-	// The individual line items that make up the invoice
-	Lines *InvoiceLines `json:"lines"`
-
-	// Starting customer balance before attempting to pay invoice. If the
-	// invoice has not been attempted yet, this will be the current customer
-	// balance.
-	StartingBalance int64 `json:"starting_balance"`
-
-	// Ending customer balance after attempting to pay invoice. If the invoice
-	// has not been attempted yet, this will be null.
-	EndingBalance Int64 `json:"ending_balance"`
-
-	NextPayment Int64 `json:"next_payment_attempt"`
-	Livemode    bool  `json:"livemode"`
+	Id              string        `json:"id"`
+	AmountDue       int64         `json:"amount_due"`
+	AttemptCount    int           `json:"attempt_count"`
+	Attempted       bool          `json:"attempted"`
+	Closed          bool          `json:"closed"`
+	Paid            bool          `json:"paid"`
+	PeriodEnd       int64         `json:"period_end"`
+	PeriodStart     int64         `json:"period_start"`
+	Subtotal        int64         `json:"subtotal"`
+	Total           int64         `json:"total"`
+	Charge          String        `json:"charge"`
+	Customer        string        `json:"closed"`
+	Date            int64         `json:"date"`
+	Discount        *Discount     `json:"discount"`
+	Lines           *InvoiceLines `json:"lines"`
+	StartingBalance int64         `json:"starting_balance"`
+	EndingBalance   Int64         `json:"ending_balance"`
+	NextPayment     Int64         `json:"next_payment_attempt"`
+	Livemode        bool          `json:"livemode"`
 }
 
+// InvoiceLines represents an individual line items that is part of an invoice.
 type InvoiceLines struct {
 	InvoiceItems  []*InvoiceItem      `json:"invoiceitems"`
 	Prorations    []*InvoiceItem      `json:"prorations"`
@@ -86,7 +50,8 @@ type Period struct {
 	End   int64 `json:"end"`
 }
 
-// InvoiceClient provides an API for Querying Stripe Invoices.
+// InvoiceClient encapsulates operations for querying invoices using the Stripe
+// REST API.
 type InvoiceClient struct{}
 
 // Retrieves the invoice with the given ID.
@@ -99,7 +64,7 @@ func (self *InvoiceClient) Retrieve(id string) (*Invoice, error) {
 	return &invoice, err
 }
 
-// Retrieves the upcoming invoice for a customer with the given ID.
+// Retrieves the upcoming invoice the given customer ID.
 //
 // see https://stripe.com/docs/api#retrieve_customer_invoice
 func (self *InvoiceClient) RetrieveCustomer(cid string) (*Invoice, error) {
@@ -109,34 +74,28 @@ func (self *InvoiceClient) RetrieveCustomer(cid string) (*Invoice, error) {
 	return &invoice, err
 }
 
-// ListN returns a list of invoices across all customers using the Stripe API's
-// default range (count 10, offset 0). The items are returned in sorted order,
-// with the most recent items appearing first.
+// Returns a list of Invoices.
 //
 // see https://stripe.com/docs/api#list_customer_invoices
 func (self *InvoiceClient) List() ([]*Invoice, error) {
 	return self.list("", 10, 0)
 }
 
-// ListN returns a list of invoices across all customers using the specified
-// range. The items are returned in sorted order, with the most recent items
-// appearing first.
+// Returns a list of Invoices at the specified range.
 //
 // see https://stripe.com/docs/api#list_customer_invoices
 func (self *InvoiceClient) ListN(count int, offset int) ([]*Invoice, error) {
 	return self.list("", count, offset)
 }
 
-// CustomerList returns a list of invoices for the specified customer id
-// using the Stripe API's default range (count 10, offset 0)
+// Returns a list of Invoices with the given Customer ID.
 //
 // see https://stripe.com/docs/api#list_customer_invoices
 func (self *InvoiceClient) CustomerList(id string) ([]*Invoice, error) {
 	return self.list(id, 10, 0)
 }
 
-// CustomerListN returns a list of invoices for the specified customer id,
-// range, and count.
+// Returns a list of Invoices with the given Customer ID, at the specified range.
 //
 // see https://stripe.com/docs/api#list_customer_invoices
 func (self *InvoiceClient) CustomerListN(id string, count int, offset int) ([]*Invoice, error) {
