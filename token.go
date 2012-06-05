@@ -4,9 +4,12 @@ import (
 	"net/url"
 )
 
+// Token represents a unique identifier for a credit card that can be safely
+// stored without having to hold sensitive card information on your own servers.
+//
 // see https://stripe.com/docs/api#token_object
 type Token struct {
-	Id       int    `json:"id"`
+	Id       string `json:"id"`
 	Amount   int64  `json:"amount"`
 	Currency string `json:"currency"`
 	Card     *Card  `json:"card"`
@@ -15,10 +18,11 @@ type Token struct {
 	Livemode bool   `json:"livemode"`
 }
 
+// TokenClient encapsulates operations for creating and querying tokens using
+// the Stripe REST API.
 type TokenClient struct{}
 
-// TokenParams is a data structure that represents the required input parameters
-// for Creating Credit Card Tokens in the system.
+// TokenParams encapsulates options for creating a new Card Token.
 type TokenParams struct {
 	Currency string
 	Card     *CardParams
