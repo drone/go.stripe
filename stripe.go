@@ -42,8 +42,8 @@ var (
 	Tokens        = new(TokenClient)
 )
 
-// SetKeyEnv retrieves the Stripe API key using the STRIPE_API_KEY
-// environment variable.
+// SetKeyEnv retrieves the Stripe API key using the STRIPE_API_KEY environment
+// variable.
 func SetKeyEnv() (err error) {
 	_key = os.Getenv("STRIPE_API_KEY")
 	if _key == "" {
@@ -109,6 +109,7 @@ func query(method, path string, values url.Values, v interface{}) error {
 	return json.Unmarshal(body, v)
 }
 
+// Error encapsulates an error returned by the Stripe REST API.
 type Error struct {
 	Code   int
 	Detail struct {
@@ -121,4 +122,12 @@ type Error struct {
 
 func (e *Error) Error() string {
 	return e.Detail.Message
+}
+
+// Response to a Deletion request.
+type DeleteResp struct {
+	// ID of the Object that was deleted
+	Id string `json:"id"`
+	// Boolean value indicating object was successfully deleted.
+	Deleted bool `json:"deleted"`
 }
