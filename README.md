@@ -29,8 +29,6 @@ stripe.GetEnv()
 params := stripe.CustomerParams{
 	Email:  "george.costanza@mail.com",
 	Desc:   "short, bald",
-	Coupon: c1.Id,
-	Plan:   p1.Id,
 	Card:   &stripe.CardParams {
 		Name     : "George Costanza",
 		Number   : "4242424242424242",
