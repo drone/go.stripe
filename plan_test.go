@@ -135,9 +135,12 @@ func TestDeletePlan(t *testing.T) {
 	Plans.Create(&p1)
 
 	// let's try to delete the plan
-	_, err := Plans.Delete(p1.Id)
+	ok, err := Plans.Delete(p1.Id)
 	if err != nil {
 		t.Errorf("Expected Plan deletion, got Error %s", err.Error())
+	}
+	if !ok {
+		t.Errorf("Expected Plan deletion true, got false")
 	}
 }
 

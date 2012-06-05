@@ -11,6 +11,10 @@ const (
 	IntervalYear  = "year"
 )
 
+// Plan holds details about pricing information for different products and
+// feature levels on your site. For example, you might have a $10/month plan
+// for basic features and a different $20/month plan for premium features.
+//
 // see https://stripe.com/docs/api#plan_object
 type Plan struct {
 	// Unique Identifier for this Plan.
@@ -35,10 +39,11 @@ type Plan struct {
 	Livemode        bool `json:"livemode"`
 }
 
+// PlanClient encapsulates operations for creating, updating, deleting and
+// querying plans using the Stripe REST API.
 type PlanClient struct{}
 
-// PlanParams is a data structure that represents the required input parameters
-// for Creating Plan data in the system.
+// PlanParams encapsulates options for creating a new Plan.
 type PlanParams struct {
 	// Unique string of your choice that will be used to identify this plan
 	// when subscribing a customer.
@@ -64,7 +69,9 @@ type PlanParams struct {
 	TrialPeriodDays int
 }
 
-// see https://stripe.com/docs/api?lang=java#create_plan
+// Creates a new Plan.
+//
+// see https://stripe.com/docs/api#create_plan
 func (self *PlanClient) Create(params *PlanParams) (*Plan, error) {
 	plan := Plan{}
 	values := url.Values{
@@ -86,7 +93,7 @@ func (self *PlanClient) Create(params *PlanParams) (*Plan, error) {
 
 // Retrieves the plan with the given ID.
 //
-// see https://stripe.com/docs/api?lang=java#retrieve_plan
+// see https://stripe.com/docs/api#retrieve_plan
 func (self *PlanClient) Retrieve(id string) (*Plan, error) {
 	plan := Plan{}
 	path := "/v1/plans/" + url.QueryEscape(id)
@@ -97,7 +104,7 @@ func (self *PlanClient) Retrieve(id string) (*Plan, error) {
 // Updates the name of a plan. Other plan details (price, interval, etc.) are,
 // by design, not editable.
 //
-// see https://stripe.com/docs/api?lang=java#update_plan
+// see https://stripe.com/docs/api#update_plan
 func (self *PlanClient) Update(id string, newName string) (*Plan, error) {
 	values := url.Values{"name": {newName}}
 	plan := Plan{}
@@ -106,25 +113,28 @@ func (self *PlanClient) Update(id string, newName string) (*Plan, error) {
 	return &plan, err
 }
 
-// see https://stripe.com/docs/api?lang=java#delete_plan
-func (self *PlanClient) Delete(id string) (*Plan, error) {
-	plan := Plan{}
+// Deletes a plan with the given ID.
+//
+// see https://stripe.com/docs/api#delete_plan
+func (self *PlanClient) Delete(id string) (bool, error) {
+	resp := DeleteResp{}
 	path := "/v1/plans/" + url.QueryEscape(id)
-	err := query("DELETE", path, nil, &plan)
-	return &plan, err
+	if err := query("DELETE", path, nil, &resp); err != nil {
+		return false, err
+	}
+	return resp.Deleted, nil
 }
 
 // Returns a list of your Plans.
 //
-// see https://stripe.com/docs/api?lang=java#list_Plans
+// see https://stripe.com/docs/api#list_Plans
 func (self *PlanClient) List() ([]*Plan, error) {
 	return self.ListN(10, 0)
 }
 
-// Returns a list of your Plans with the specified count and at the specified
-// offset.
+// Returns a list of your Plans at the specified range.
 //
-// see https://stripe.com/docs/api?lang=java#list_Plans
+// see https://stripe.com/docs/api#list_Plans
 func (self *PlanClient) ListN(count int, offset int) ([]*Plan, error) {
 	// define a wrapper function for the Plan List, so that we can
 	// cleanly parse the JSON
