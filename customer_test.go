@@ -177,9 +177,12 @@ func TestDeleteCustomer(t *testing.T) {
 	defer Customers.Delete(resp.Id)
 
 	// let's try to delete the customer
-	_, err := Customers.Delete(resp.Id)
+	ok, err := Customers.Delete(resp.Id)
 	if err != nil {
 		t.Errorf("Expected Customer deletion, got Error %s", err.Error())
+	}
+	if !ok {
+		t.Errorf("Expected Customer deleted true, got false")
 	}
 }
 

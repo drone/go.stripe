@@ -103,11 +103,13 @@ func (self *InvoiceItemClient) Update(id string, params *InvoiceItemParams) (*In
 // Removes an Invoice Item with the given ID.
 // 
 // see https://stripe.com/docs/api#delete_invoiceitem
-func (self *InvoiceItemClient) Delete(id string) (*InvoiceItem, error) {
-	item := InvoiceItem{}
+func (self *InvoiceItemClient) Delete(id string) (bool, error) {
+	resp := DeleteResp{}
 	path := "/v1/invoiceitems/" + url.QueryEscape(id)
-	err := query("DELETE", path, nil, &item)
-	return &item, err
+	if err := query("DELETE", path, nil, &resp); err != nil {
+		return false, err
+	}
+	return resp.Deleted, nil
 }
 
 // Returns a list of Invoice Items.

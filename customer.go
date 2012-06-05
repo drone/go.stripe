@@ -102,11 +102,13 @@ func (self *CustomerClient) Update(id string, c *CustomerParams) (*Customer, err
 // Deletes a Customer (permanently) with the given ID.
 //
 // see https://stripe.com/docs/api#delete_customer
-func (self *CustomerClient) Delete(id string) (*Customer, error) {
-	customer := Customer{}
+func (self *CustomerClient) Delete(id string) (bool, error) {
+	resp := DeleteResp{}
 	path := "/v1/customers/" + url.QueryEscape(id)
-	err := query("DELETE", path, nil, &customer)
-	return &customer, err
+	if err := query("DELETE", path, nil, &resp); err != nil {
+		return false, err
+	}
+	return resp.Deleted, nil
 }
 
 // Returns a list of your Customers.
