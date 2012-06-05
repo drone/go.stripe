@@ -109,9 +109,12 @@ func TestDeleteCoupon(t *testing.T) {
 	Coupons.Create(&c1)
 
 	// let's try to delete the coupon
-	_, err := Coupons.Delete(c1.Id)
+	ok, err := Coupons.Delete(c1.Id)
 	if err != nil {
 		t.Errorf("Expected Coupon deletion, got Error %s", err.Error())
+	}
+	if !ok {
+		t.Errorf("Expected Coupon deletion true, got false")
 	}
 }
 

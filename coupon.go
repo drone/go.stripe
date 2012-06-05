@@ -12,9 +12,11 @@ const (
 	DurationRepeating = "repeating"
 )
 
+// Coupon represents percent-off discount you might want to apply to a customer.
+//
 // see https://stripe.com/docs/api#coupon_object
 type Coupon struct {
-	// Coupon's Unique Identifier in the system.
+	// Unique Identifier for this Coupon
 	Id string `json:"id"`
 
 	// Describes how long a customer who applies this coupon will get the
@@ -42,12 +44,14 @@ type Coupon struct {
 	Livemode      bool `json:"livemode"`
 }
 
+// CouponClient encapsulates operations for creating, updating, deleting and
+// querying coupons using the Stripe REST API.
 type CouponClient struct{}
 
-// see https://stripe.com/docs/api?lang=java#create_coupon
+// CouponParams encapsulates options for creating a new Coupon.
 type CouponParams struct {
-	// Unique string of your choice that will be used to identify this coupon
-	// when applying it a customer. 
+	// (Optional) Unique string of your choice that will be used to identify
+	// this coupon when applying it a customer. 
 	Id string
 
 	// A positive integer between 1 and 100 that represents the discount the
@@ -58,22 +62,24 @@ type CouponParams struct {
 	// or repeating.
 	Duration string
 
-	// If duration is repeating, a positive integer that specifies the number of
-	// months the discount will be in effect.
+	// (Optional) If duration is repeating, a positive integer that specifies
+	// the number of months the discount will be in effect.
 	DurationInMonths int
 
-	// A positive integer specifying the number of times the coupon can be
-	// redeemed before it's no longer valid. For example, you might have a 50%
-	// off coupon that the first 20 readers of your blog can use.
+	// (Optional) A positive integer specifying the number of times the coupon
+	// can be redeemed before it's no longer valid. For example, you might have
+	// a 50% off coupon that the first 20 readers of your blog can use.
 	MaxRedemptions int
 
-	// UTC timestamp specifying the last time at which the coupon can be
-	// redeemed. After the redeem_by date, the coupon can no longer be applied
-	// to new customers.
+	// (Optional) UTC timestamp specifying the last time at which the coupon can
+	// be redeemed. After the redeem_by date, the coupon can no longer be
+	// applied to new customers.
 	RedeemBy int64
 }
 
-// see https://stripe.com/docs/api?lang=java#create_coupon
+// Creates a new Coupon.
+//
+// see https://stripe.com/docs/api#create_coupon
 func (self *CouponClient) Create(params *CouponParams) (*Coupon, error) {
 	coupon := Coupon{}
 	values := url.Values{
@@ -106,7 +112,7 @@ func (self *CouponClient) Create(params *CouponParams) (*Coupon, error) {
 
 // Retrieves the coupon with the given ID.
 //
-// see https://stripe.com/docs/api?lang=java#retrieve_coupon
+// see https://stripe.com/docs/api#retrieve_coupon
 func (self *CouponClient) Retrieve(id string) (*Coupon, error) {
 	coupon := Coupon{}
 	path := "/v1/coupons/" + url.QueryEscape(id)
@@ -116,25 +122,26 @@ func (self *CouponClient) Retrieve(id string) (*Coupon, error) {
 
 // Deletes the coupon with the given ID.
 //
-// see https://stripe.com/docs/api?lang=java#delete_coupon
-func (self *CouponClient) Delete(id string) (*Coupon, error) {
-	coupon := Coupon{}
+// see https://stripe.com/docs/api#delete_coupon
+func (self *CouponClient) Delete(id string) (bool, error) {
+	resp := DeleteResp{}
 	path := "/v1/coupons/" + url.QueryEscape(id)
-	err := query("DELETE", path, nil, &coupon)
-	return &coupon, err
+	if err := query("DELETE", path, nil, &resp); err != nil {
+		return false, err
+	}
+	return resp.Deleted, nil
 }
 
 // Returns a list of your coupons.
 //
-// see https://stripe.com/docs/api?lang=java#list_coupons
+// see https://stripe.com/docs/api#list_coupons
 func (self *CouponClient) List() ([]*Coupon, error) {
 	return self.ListN(10, 0)
 }
 
-// Returns a list of your coupons with the specified count and at the specified
-// offset.
+// Returns a list of your coupons at the specified range.
 //
-// see https://stripe.com/docs/api?lang=java#list_coupons
+// see https://stripe.com/docs/api#list_coupons
 func (self *CouponClient) ListN(count int, offset int) ([]*Coupon, error) {
 	// define a wrapper function for the Coupon List, so that we can
 	// cleanly parse the JSON
