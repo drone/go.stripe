@@ -76,7 +76,6 @@ type ChargeParams struct {
 // querying charges using the Stripe REST API.
 type ChargeClient struct{}
 
-
 // Creates a new credit card Charge.
 //
 // see https://stripe.com/docs/api#create_charge
@@ -163,7 +162,6 @@ func (self *ChargeClient) CustomerList(id string) ([]*Charge, error) {
 func (self *ChargeClient) CustomerListN(id string, count int, offset int) ([]*Charge, error) {
 	return self.list(id, count, offset)
 }
-
 
 func (self *ChargeClient) list(id string, count int, offset int) ([]*Charge, error) {
 	// define a wrapper function for the Charge List, so that we can

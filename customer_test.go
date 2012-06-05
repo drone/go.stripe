@@ -65,11 +65,39 @@ func TestCreateCustomer(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected Customer, got Error %s", err.Error())
 	}
-	if cust.Email != cust1.Email {
-		t.Errorf("Expected Customer Email %s, got %s", cust1.Email, cust.Email)
+	if string(cust.Email) != cust1.Email {
+		t.Errorf("Expected Customer Email %s, got %v", cust1.Email, cust.Email)
 	}
-	if cust.Desc != cust1.Desc {
-		t.Errorf("Expected Customer Desc %s, got %s", cust1.Desc, cust.Desc)
+	if string(cust.Desc) != cust1.Desc {
+		t.Errorf("Expected Customer Desc %s, got %v", cust1.Desc, cust.Desc)
+	}
+}
+
+// TestCreateCustomerToken will test that we can successfully Create a Customer
+// using a credit card Token.
+func TestCreateCustomerToken(t *testing.T) {
+
+	// Create a Token for the credit card
+	token, _ := Tokens.Create(&token1)
+
+	// Create a Charge that uses a Token
+	cust := CustomerParams{
+		Token: token.Id,
+		Desc:  "Customer for site@stripe.com",
+	}
+
+	// Create the charge
+	resp, err := Customers.Create(&cust)
+	defer Customers.Delete(resp.Id)
+	if err != nil {
+		t.Errorf("Expected Create Customer, got Error %s", err.Error())
+	}
+	if resp.Card == nil {
+		t.Errorf("Expected Customer Card from Token, got nil")
+	}
+	// Sanity check to make sure card was attached to customer
+	if string(resp.Card.Name) != string(token.Card.Name) {
+		t.Errorf("Expected Card Name %s, got %v", token.Card.Name, resp.Card.Name)
 	}
 }
 
@@ -96,11 +124,11 @@ func TestRetrieveCustomer(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected Customer, got Error %s", err.Error())
 	}
-	if cust.Email != cust2.Email {
-		t.Errorf("Expected Customer Email %s, got %s", cust2.Email, cust.Email)
+	if string(cust.Email) != cust2.Email {
+		t.Errorf("Expected Customer Email %s, got %v", cust2.Email, cust.Email)
 	}
-	if cust.Desc != cust2.Desc {
-		t.Errorf("Expected Customer Desc %s, got %s", cust2.Desc, cust.Desc)
+	if string(cust.Desc) != cust2.Desc {
+		t.Errorf("Expected Customer Desc %s, got %v", cust2.Desc, cust.Desc)
 	}
 	if cust.Card == nil {
 		t.Errorf("Expected Credit Card %s, got nil", cust2.Card.Number)
@@ -167,7 +195,7 @@ func TestListCustomers(t *testing.T) {
 	defer Customers.Delete(resp2.Id)
 
 	// get the list from Stripe
-	customers, err := Customers.List()
+	customers, err := Customers.ListN(2, 0)
 	if err != nil {
 		t.Errorf("Expected Customer List, got Error %s", err.Error())
 	}

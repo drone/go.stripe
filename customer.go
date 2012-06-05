@@ -5,41 +5,20 @@ import (
 	"strconv"
 )
 
-// Customer object
+// Customer encapsulates details about a Customer registered in Stripe.
 //
 // see https://stripe.com/docs/api#customer_object
 type Customer struct {
-	// Customer's Unique Identifier within the Stripe database.
-	Id   string `json:"id"`
-	Desc string `json:"description,omitempty"`
-
-	// Customer's Email address
-	Email   string `json:"email,omitempty"`
-	Created int64  `json:"created"`
-
-	// Current balance, if any, being stored on the customer's account. If
-	// negative, the customer has credit to apply to the next invoice. If
-	// positive, the customer has an amount owed that will be added to the next
-	// invoice. The balance does not refer to any unpaid invoices; it solely
-	// takes into account amounts that have yet to be successfully applied to
-	// any invoice.
-	Balance int64 `json:"account_balance"`
-
-	// Whether or not the latest charge for the customer's latest invoice has
-	// failed.
-	Delinquent bool `json:"delinquent"`
-
-	// Describes the active credit card for the customer, if there is one.
-	Card *Card `json:"active_card,omitempty"`
-
-	// Describes the current discount active for the customer, if there is one.
-	Discount *Discount `json:"discount,omitempty"`
-
-	// Describes the current subscription for the customer, if there is one. If
-	// the customer has no current subscription, this will be null.
+	Id           string        `json:"id"`
+	Desc         String        `json:"description,omitempty"`
+	Email        String        `json:"email,omitempty"`
+	Created      int64         `json:"created"`
+	Balance      int64         `json:"account_balance"`
+	Delinquent   bool          `json:"delinquent"`
+	Card         *Card         `json:"active_card,omitempty"`
+	Discount     *Discount     `json:"discount,omitempty"`
 	Subscription *Subscription `json:"subscription,omitempty"`
-
-	Livemode bool `json:"livemode"`
+	Livemode     bool          `json:"livemode"`
 }
 
 // Discount represents the actual application of a coupon to a particular
@@ -47,54 +26,46 @@ type Customer struct {
 //
 // see https://stripe.com/docs/api#discount_object
 type Discount struct {
-	// Discount's Unique Identifier within the Stripe database.
-	Id string `json:"id"`
-
-	// Customer's Unique Identifier that has received this discount.
-	Customer string `json:"customer"`
-
-	// Date that the coupon was applied
-	Start Int64 `json:"start"`
-
-	// If the coupon has a duration of once or multi-month, the date that this
-	// discount will end. If the coupon used has a forever duration, this
-	// attribute will be null.
-	End Int64 `json:"end"`
-
-	// the Coupon applied to create this discount
-	Coupon *Coupon `json:"coupon"`
+	Id       string  `json:"id"`
+	Customer string  `json:"customer"`
+	Start    Int64   `json:"start"`
+	End      Int64   `json:"end"`
+	Coupon   *Coupon `json:"coupon"`
 }
 
-// CustomerParams is a data structure that represents the required input
-// parameters for Creating and Updating Customer data in the system.
+// CustomerParams encapsulates options for creating and updating Customers.
 type CustomerParams struct {
-	Email, Desc string
+	// (Optional) The customer's email address.
+	Email string
 
-	// Credit Card to attach to the customer.
+	// (Optional) An arbitrary string which you can attach to a customer object.
+	Desc string
+
+	// (Optional) Customer's Active Credit Card
 	Card *CardParams
 
-	// If you provide a coupon code, the customer will have a discount applied
-	// on all recurring charges.
+	// (Optional) Customer's Active Credid Card, using a Card Token
+	Token string
+
+	// (Optional) If you provide a coupon code, the customer will have a
+	// discount applied on all recurring charges.
 	Coupon string
 
-	// The identifier of the plan to subscribe the customer to. If provided,
-	// the returned customer object has a 'subscription' attribute describing
-	// the state of the customer's subscription.
+	// (Optional) The identifier of the plan to subscribe the customer to. If
+	// provided, the returned customer object has a 'subscription' attribute
+	// describing the state of the customer's subscription.
 	Plan string
 
-	// UTC integer timestamp representing the end of the trial period the
-	// customer will get before being charged for the first time.
+	// (Optional) UTC integer timestamp representing the end of the trial period
+	// the customer will get before being charged for the first time.
 	TrialEnd int64
 }
 
-// CustomerClient is a wrapper around the Stripe Customer API, allowing you to
-// perform recurring charges and track multiple charges that are associated with
-// the same customer. The API allows you to create, delete, and update your
-// customers. You can retrieve individual customers as well as a list of all
-// your customers.
+// CustomerClient encapsulates operations for creating, updating, deleting and
+// querying customers using the Stripe REST API.
 type CustomerClient struct{}
 
-// Creates a new customer object.
+// Creates a new Customer.
 //
 // see https://stripe.com/docs/api#create_customer
 func (self *CustomerClient) Create(c *CustomerParams) (*Customer, error) {
@@ -106,8 +77,7 @@ func (self *CustomerClient) Create(c *CustomerParams) (*Customer, error) {
 	return &customer, err
 }
 
-// Retrieves the details of an existing customer using the provided customer
-// identifier.
+// Retrieves a Customer with the given ID.
 //
 // see https://stripe.com/docs/api#retrieve_customer
 func (self *CustomerClient) Retrieve(id string) (*Customer, error) {
@@ -117,8 +87,7 @@ func (self *CustomerClient) Retrieve(id string) (*Customer, error) {
 	return &customer, err
 }
 
-// Updates the specified customer by setting the values of the parameters
-// passed.
+// Updates a Customer with the given ID.
 //
 // see https://stripe.com/docs/api#update_customer
 func (self *CustomerClient) Update(id string, c *CustomerParams) (*Customer, error) {
@@ -130,7 +99,7 @@ func (self *CustomerClient) Update(id string, c *CustomerParams) (*Customer, err
 	return &customer, err
 }
 
-// Permanently deletes a customer. It cannot be undone.
+// Deletes a Customer (permanently) with the given ID.
 //
 // see https://stripe.com/docs/api#delete_customer
 func (self *CustomerClient) Delete(id string) (*Customer, error) {
@@ -140,11 +109,15 @@ func (self *CustomerClient) Delete(id string) (*Customer, error) {
 	return &customer, err
 }
 
+// Returns a list of your Customers.
+//
 // see https://stripe.com/docs/api#list_customers
 func (self *CustomerClient) List() ([]*Customer, error) {
 	return self.ListN(10, 0)
 }
 
+// Returns a list of your Customers at the specified range.
+//
 // see https://stripe.com/docs/api#list_customers
 func (self *CustomerClient) ListN(count int, offset int) ([]*Customer, error) {
 	// define a wrapper function for the Customer List, so that we can
@@ -189,6 +162,8 @@ func appendCustomerParamsToValues(c *CustomerParams, values *url.Values) {
 	// add optional credit card details, if specified
 	if c.Card != nil {
 		appendCardParamsToValues(c.Card, values)
+	} else if len(c.Token) != 0 {
+		values.Add("card", c.Token)
 	}
 }
 
