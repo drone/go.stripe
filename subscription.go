@@ -66,7 +66,7 @@ type SubscriptionParams struct {
 	Coupon string
 
 	// Flag telling us whether to prorate switching plans during a billing cycle
-	Prorate  bool
+	Prorate bool
 
 	// UTC integer timestamp representing the end of the trial period the
 	// customer will get before being charged for the first time. If set,

@@ -35,6 +35,8 @@ var (
 	Charges       = new(ChargeClient)
 	Coupons       = new(CouponClient)
 	Customers     = new(CustomerClient)
+	Invoices      = new(InvoiceClient)
+	InvoiceItems  = new(InvoiceItemClient)
 	Plans         = new(PlanClient)
 	Subscriptions = new(SubscriptionClient)
 	Tokens        = new(TokenClient)
