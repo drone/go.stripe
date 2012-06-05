@@ -3,7 +3,7 @@ package stripe
 import (
 	"encoding/json"
 	"errors"
-	//"fmt"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -11,6 +11,9 @@ import (
 	"os"
 	"strings"
 )
+
+// enable logging to print the request and reponses to stdout
+var _log bool
 
 // the API Key used to authenticate all Stripe API requests
 var _key string
@@ -76,8 +79,12 @@ func query(method, path string, values url.Values, v interface{}) error {
 		reqBody = strings.NewReader(values.Encode())
 	}
 
-	//fmt.Println("REQUEST: ", endpoint.String())
-	//fmt.Println(values.Encode())
+	// Log request if logging enabled
+	if _log {
+		fmt.Println("REQUEST: ", method, endpoint.String())
+		fmt.Println(values.Encode())
+	}
+
 	// create the request
 	req, err := http.NewRequest(method, endpoint.String(), reqBody)
 	if err != nil {
@@ -96,8 +103,13 @@ func query(method, path string, values url.Values, v interface{}) error {
 	if err != nil {
 		return err
 	}
-	//fmt.Println("RESPONSE: ", r.StatusCode)
-	//fmt.Println(string(body))
+
+	// Log response if logging enabled
+	if _log {
+		fmt.Println("RESPONSE: ", r.StatusCode)
+		fmt.Println(string(body))
+	}
+
 	// is this an error?
 	if r.StatusCode != 200 {
 		error := Error{}
