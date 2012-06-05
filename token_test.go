@@ -83,4 +83,3 @@ func TestRetrieveToken(t *testing.T) {
 		return
 	}
 }
-
