@@ -20,7 +20,7 @@ Or you can specify your Secret Key in environment variable `STRIPE_API_KEY`, and
 then invoke the following function:
 
 ```go
-stripe.GetEnv()
+stripe.SetKeyEnv()
 ```
 
 ### Create Customer
