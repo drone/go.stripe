@@ -1,4 +1,5 @@
 # go.stripe
+[![](https://drone.io/drone/go.stripe/status.png)](https://drone.io/drone/go.stripe/latest)
 
 a simple Credit Card processing library for Go using the Stripe API
 
