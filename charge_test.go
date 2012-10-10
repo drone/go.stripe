@@ -60,7 +60,10 @@ func TestCreateCharge(t *testing.T) {
 func TestCreateChargeToken(t *testing.T) {
 
 	// Create a Token for the credit card
-	token, _ := Tokens.Create(&token1)
+	token, err := Tokens.Create(&token1)
+	if err != nil {
+		t.Errorf("Expected Token Creation, got Error %s", err.Error())
+	}
 
 	// Create a Charge that uses a Token
 	charge := ChargeParams{
@@ -71,7 +74,7 @@ func TestCreateChargeToken(t *testing.T) {
 	}
 
 	// Create the charge
-	_, err := Charges.Create(&charge)
+	_, err = Charges.Create(&charge)
 	if err != nil {
 		t.Errorf("Expected Successful Charge, got Error %s", err.Error())
 	}
