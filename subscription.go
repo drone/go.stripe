@@ -29,6 +29,7 @@ type Subscription struct {
 	TrialEnd           Int64  `json:"trial_end"`
 	CanceledAt         Int64  `json:"canceled_at"`
 	CancelAtPeriodEnd  bool   `json:"cancel_at_period_end"`
+	Quantity           int64  `json"quantity"`
 }
 
 // SubscriptionClient encapsulates operations for updating and canceling
@@ -60,6 +61,9 @@ type SubscriptionParams struct {
 
 	// (Optional) A new card Token to attach to the customer.
 	Token string
+
+	// (Optional) The quantity you'd like to apply to the subscription you're creating.
+	Quantity int64
 }
 
 // Subscribes a customer to a new plan.
@@ -77,6 +81,9 @@ func (self *SubscriptionClient) Update(customerId string, params *SubscriptionPa
 	}
 	if params.TrialEnd != 0 {
 		values.Add("trial_end", strconv.FormatInt(params.TrialEnd, 10))
+	}
+	if params.Quantity != 0 {
+		values.Add("quantity", strconv.FormatInt(params.Quantity, 10))
 	}
 	// attach a new card, if requested
 	if len(params.Token) != 0 {
