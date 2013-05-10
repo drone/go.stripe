@@ -27,6 +27,7 @@ var (
 		Coupon:   "test coupon 1",
 		Prorate:  true,
 		TrialEnd: time.Now().Unix() + 1000000,
+		Quantity: 5,
 		Card: &CardParams{
 			Name:     "George Costanza",
 			Number:   "4242424242424242",
@@ -77,9 +78,12 @@ func TestUpdateSubscriptionCard(t *testing.T) {
 	defer Coupons.Delete(c1.Id)
 
 	// Subscribe a Customer to a new plan, using a new Credit Card
-	_, err := Subscriptions.Update(cust.Id, &sub2)
+	resp, err := Subscriptions.Update(cust.Id, &sub2)
 	if err != nil {
 		t.Errorf("Expected Subscription, got error %s", err.Error())
+	}
+	if resp.Quantity != sub2.Quantity {
+		t.Errorf("Expected Quantity %d, got %d", sub2.Quantity, resp.Quantity)
 	}
 
 	// Check to see if the customer's card was added 
