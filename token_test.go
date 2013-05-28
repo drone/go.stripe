@@ -18,7 +18,6 @@ var (
 
 	// Charge with only the required fields
 	token1 = TokenParams{
-		Currency: USD,
 		Card: &CardParams{
 			Name:     "George Costanza",
 			Number:   "4242424242424242",
@@ -38,9 +37,6 @@ func TestCreateToken(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("Expected Token Created, got Error %s", err.Error())
-	}
-	if resp.Currency != token1.Currency {
-		t.Errorf("Expected Token Currency %s, got %s", charge1.Currency, resp.Currency)
 	}
 	if resp.Amount != 0 {
 		t.Errorf("Expected Token Amount 0, got %v", resp.Amount)
