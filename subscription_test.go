@@ -139,7 +139,38 @@ func TestCancelSubscription(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected Subscription Cancellation, got error %s", err.Error())
 	}
+
 	if subs.Status != SubscriptionCanceled {
 		t.Errorf("Expected Subscription Status %s, got %s", SubscriptionCanceled, subs.Status)
+	}
+}
+
+func TestCancelSubscriptionAtPeriodEnd(t *testing.T) {
+	// Create the customer, and defer its deletion
+	cust, _ := Customers.Create(&cust1)
+	defer Customers.Delete(cust.Id)
+
+	// Create the plan, and defer its deletion
+	Plans.Create(&p1)
+	defer Customers.Delete(p1.Id)
+
+	// Subscribe the Customer to the Plan
+	_, err := Subscriptions.Update(cust.Id, &sub1)
+	if err != nil {
+		t.Errorf("Expected Subscription, got error %s", err.Error())
+	}
+
+	// Now cancel the subscription
+	subs, err := Subscriptions.CancelAtPeriodEnd(cust.Id)
+	if err != nil {
+		t.Errorf("Expected Subscription Cancellation, got error %s", err.Error())
+	}
+	
+	if subs.Status != SubscriptionActive {
+		t.Errorf("Expected Subscription Status %s, got %s", SubscriptionCanceled, subs.Status)
+	}
+	
+	if subs.CancelAtPeriodEnd != true {
+		t.Errorf("Expected CancelAtPeriodEnd to be %s, got %s", true, subs.CancelAtPeriodEnd)
 	}
 }
