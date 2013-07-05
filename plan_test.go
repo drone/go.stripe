@@ -35,20 +35,6 @@ var (
 	}
 )
 
-func TestClientKeyListPlans(t *testing.T) {
-	// Provide an invalid default key and defer reset to normal
-	key := _key
-	_key = ""
-	defer func() { _key = key }()
-
-	client := &PlanClient{Client{key: key}}
-	_, err := client.List()
-
-	if err != nil {
-		t.Errorf("Expected Plan List, got Error %s", err.Error())
-	}
-}
-
 // TestCreatePlan will test that we can successfully Create a plan, parse
 // the JSON reponse from Stripe, and that all values are populated as expected.
 //

@@ -1,7 +1,7 @@
 package stripe
 
 import (
-        "net/url"
+	"net/url"
 	"testing"
 )
 
@@ -22,7 +22,7 @@ func TestClientKey(t *testing.T) {
 	client := &Client{key: key}
 
 	values := url.Values{}
-        var i interface{}
+	var i interface{}
 	err := client.query("GET", "/v1/account", values, &i)
 
 	if err != nil {
@@ -30,12 +30,12 @@ func TestClientKey(t *testing.T) {
 	}
 }
 
-func TestClientKeyError(t *testing.T){
+func TestClientKeyError(t *testing.T) {
 	// Provide an invalid client key and a valid default key
 	client := &Client{key: "123"}
 
 	values := url.Values{}
-        var i interface{}
+	var i interface{}
 	err := client.query("GET", "/v1/account", values, &i)
 
 	if err == nil {
