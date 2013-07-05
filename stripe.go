@@ -12,6 +12,10 @@ import (
 	"strings"
 )
 
+type Client struct {
+	key string
+}
+
 // enable logging to print the request and reponses to stdout
 var _log bool
 
@@ -57,7 +61,13 @@ func SetKeyEnv() (err error) {
 
 // query submits an http.Request and parses the JSON-encoded http.Response,
 // storing the result in the value pointed to by v.
-func query(method, path string, values url.Values, v interface{}) error {
+func (client *Client) query(method, path string, values url.Values, v interface{}) error {
+	key := _key
+
+	if client.key != "" {
+		key = client.key
+	}
+
 	// parse the stripe URL
 	endpoint, err := url.Parse(_url)
 	if err != nil {
@@ -66,7 +76,7 @@ func query(method, path string, values url.Values, v interface{}) error {
 
 	// set the endpoint for the specific API
 	endpoint.Path = path
-	endpoint.User = url.User(_key)
+	endpoint.User = url.User(key)
 
 	// if this is an http GET, add the url.Values to the endpoint
 	if method == "GET" {

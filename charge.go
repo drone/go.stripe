@@ -74,7 +74,9 @@ type ChargeParams struct {
 
 // ChargeClient encapsulates operations for creating, updating, deleting and
 // querying charges using the Stripe REST API.
-type ChargeClient struct{}
+type ChargeClient struct {
+	Client
+}
 
 // Creates a new credit card Charge.
 //
@@ -97,7 +99,7 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 		values.Add("customer", params.Customer)
 	}
 
-	err := query("POST", "/v1/charges", values, &charge)
+	err := self.query("POST", "/v1/charges", values, &charge)
 	return &charge, err
 }
 
@@ -107,7 +109,7 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 func (self *ChargeClient) Retrieve(id string) (*Charge, error) {
 	charge := Charge{}
 	path := "/v1/charges/" + url.QueryEscape(id)
-	err := query("GET", path, nil, &charge)
+	err := self.query("GET", path, nil, &charge)
 	return &charge, err
 }
 
@@ -118,7 +120,7 @@ func (self *ChargeClient) Refund(id string) (*Charge, error) {
 	values := url.Values{}
 	charge := Charge{}
 	path := "/v1/charges/" + url.QueryEscape(id) + "/refund"
-	err := query("POST", path, values, &charge)
+	err := self.query("POST", path, values, &charge)
 	return &charge, err
 }
 
@@ -131,7 +133,7 @@ func (self *ChargeClient) RefundAmount(id string, amt int64) (*Charge, error) {
 	}
 	charge := Charge{}
 	path := "/v1/charges/" + url.QueryEscape(id) + "/refund"
-	err := query("POST", path, values, &charge)
+	err := self.query("POST", path, values, &charge)
 	return &charge, err
 }
 
@@ -180,7 +182,7 @@ func (self *ChargeClient) list(id string, count int, offset int) ([]*Charge, err
 		values.Add("customer", id)
 	}
 
-	err := query("GET", "/v1/charges", values, &resp)
+	err := self.query("GET", "/v1/charges", values, &resp)
 	if err != nil {
 		return nil, err
 	}

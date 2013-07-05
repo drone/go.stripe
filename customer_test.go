@@ -203,7 +203,7 @@ func TestListCustomers(t *testing.T) {
 		t.Errorf("Expected Customer List, got Error %s", err.Error())
 	}
 
-	// since we added 2 dummy customers, we expect the array to be a size of 2 
+	// since we added 2 dummy customers, we expect the array to be a size of 2
 	if len(customers) != 2 {
 		t.Errorf("Expected 2 Customers, got %s", len(customers))
 	}
