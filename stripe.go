@@ -13,7 +13,7 @@ import (
 )
 
 type Client struct {
-	key string
+	Key string
 }
 
 // enable logging to print the request and reponses to stdout
@@ -47,6 +47,7 @@ var (
 	Plans         = new(PlanClient)
 	Subscriptions = new(SubscriptionClient)
 	Tokens        = new(TokenClient)
+	Accounts      = new(AccountClient)
 )
 
 // SetKeyEnv retrieves the Stripe API key using the STRIPE_API_KEY environment
@@ -64,8 +65,8 @@ func SetKeyEnv() (err error) {
 func (client *Client) query(method, path string, values url.Values, v interface{}) error {
 	key := _key
 
-	if client.key != "" {
-		key = client.key
+	if client.Key != "" {
+		key = client.Key
 	}
 
 	// parse the stripe URL

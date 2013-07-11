@@ -19,7 +19,7 @@ func TestClientKey(t *testing.T) {
 	_key = ""
 	defer func() { _key = key }()
 
-	client := &Client{key: key}
+	client := &Client{Key: key}
 
 	values := url.Values{}
 	var i interface{}
@@ -32,7 +32,7 @@ func TestClientKey(t *testing.T) {
 
 func TestClientKeyError(t *testing.T) {
 	// Provide an invalid client key and a valid default key
-	client := &Client{key: "123"}
+	client := &Client{Key: "123"}
 
 	values := url.Values{}
 	var i interface{}
