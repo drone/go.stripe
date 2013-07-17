@@ -21,6 +21,8 @@ var _key string
 // the default URL for all Stripe API requests
 var _url string = "https://api.stripe.com"
 
+const apiVersion = "2013-02-13"
+
 // SetUrl will override the default Stripe API URL. This is primarily used
 // for unit testing.
 func SetUrl(url string) {
@@ -90,6 +92,8 @@ func query(method, path string, values url.Values, v interface{}) error {
 	if err != nil {
 		return err
 	}
+
+	req.Header.Set("Stripe-Version", apiVersion)
 
 	// submit the http request
 	r, err := http.DefaultClient.Do(req)
