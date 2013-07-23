@@ -159,12 +159,16 @@ func TestUpdateCustomer(t *testing.T) {
 	resp, _ := Customers.Create(&cust1)
 	defer Customers.Delete(resp.Id)
 
-	cust, err := Customers.Update(resp.Id, &CustomerParams{Email: "joe@email.com"})
+	balance := int64(-100)
+	cust, err := Customers.Update(resp.Id, &CustomerParams{Email: "joe@email.com", Balance: &balance})
 	if err != nil {
 		t.Errorf("Expected Customer update, got Error %s", err.Error())
 	}
 	if cust.Email != "joe@email.com" {
 		t.Errorf("Expected Updated Customer Email")
+	}
+	if cust.Balance != balance {
+		t.Errorf("Expected Updated Customer Balance")
 	}
 }
 
@@ -203,7 +207,7 @@ func TestListCustomers(t *testing.T) {
 		t.Errorf("Expected Customer List, got Error %s", err.Error())
 	}
 
-	// since we added 2 dummy customers, we expect the array to be a size of 2 
+	// since we added 2 dummy customers, we expect the array to be a size of 2
 	if len(customers) != 2 {
 		t.Errorf("Expected 2 Customers, got %s", len(customers))
 	}

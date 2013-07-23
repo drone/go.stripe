@@ -59,6 +59,9 @@ type CustomerParams struct {
 	// (Optional) UTC integer timestamp representing the end of the trial period
 	// the customer will get before being charged for the first time.
 	TrialEnd int64
+
+	// (Optional) Customer's account balance. Negative is credit, positive is added to the next invoice.
+	Balance *int64
 }
 
 // CustomerClient encapsulates operations for creating, updating, deleting and
@@ -159,6 +162,9 @@ func appendCustomerParamsToValues(c *CustomerParams, values *url.Values) {
 	}
 	if c.TrialEnd != 0 {
 		values.Add("trial_end", strconv.FormatInt(c.TrialEnd, 10))
+	}
+	if c.Balance != nil {
+		values.Add("account_balance", strconv.FormatInt(*c.Balance, 10))
 	}
 
 	// add optional credit card details, if specified
