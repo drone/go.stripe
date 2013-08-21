@@ -15,7 +15,7 @@ type Customer struct {
 	Created      int64         `json:"created"`
 	Balance      int64         `json:"account_balance"`
 	Delinquent   bool          `json:"delinquent"`
-	Card         *Card         `json:"active_card,omitempty"`
+	Cards        []*Card       `json:"cards,omitempty"`
 	Discount     *Discount     `json:"discount,omitempty"`
 	Subscription *Subscription `json:"subscription,omitempty"`
 	Livemode     bool          `json:"livemode"`
