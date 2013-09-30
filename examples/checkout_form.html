@@ -1,0 +1,24 @@
+<!-- Example code taken from https://stripe.com/docs/checkout -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Stripe Checkout Example - go.stripe</title>
+  	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+	<!-- Set the form action to the route of the handler responsible for receiving the token from Stripe -->
+	<form action="/payment/new" method="POST">
+		<!-- We're using the latest v3 API here -->
+		<script
+		src="https://checkout.stripe.com/v3/checkout.js" class="stripe-button"
+		data-key="{{ .PublishableKey }}"
+		data-amount="2000"
+		data-name="Stripe + Go Demo"
+		data-description="2 widgets ($20.00)"
+		data-currency="usd"
+		data-image="/128x128.png">
+		</script>
+	</form>
+</body>
