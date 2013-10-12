@@ -31,6 +31,7 @@ type Card struct {
 	AddressCountry    String `json:"address_country,omitempty"`
 	AddressState      String `json:"address_state,omitempty"`
 	AddressZip        String `json:"address_zip,omitempty"`
+	AddressCity       string `json:"address_city"`
 	AddressLine1Check String `json:"address_line1_check,omitempty"`
 	AddressZipCheck   String `json:"address_zip_check,omitempty"`
 	CVCCheck          String `json:"cvc_check,omitempty"`

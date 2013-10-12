@@ -15,10 +15,18 @@ type Customer struct {
 	Created      int64         `json:"created"`
 	Balance      int64         `json:"account_balance"`
 	Delinquent   bool          `json:"delinquent"`
-	Cards        []*Card       `json:"cards,omitempty"`
+	Cards        CardData      `json:"cards,omitempty"`
 	Discount     *Discount     `json:"discount,omitempty"`
 	Subscription *Subscription `json:"subscription,omitempty"`
 	Livemode     bool          `json:"livemode"`
+	DefaultCard  String        `json:"default_card"`
+}
+
+type CardData struct {
+	Object string  `json:"object"`
+	Count  int     `json:"count"`
+	Url    string  `json:"url"`
+	Data   []*Card `json:"data"`
 }
 
 // Discount represents the actual application of a coupon to a particular

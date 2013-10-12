@@ -12,10 +12,11 @@ type Token struct {
 	Id       string `json:"id"`
 	Amount   int64  `json:"amount"`
 	Currency string `json:"currency"`
-	Card     *Card  `json:"card"`
 	Created  int64  `json:"created"`
 	Used     bool   `json:"used"`
 	Livemode bool   `json:"livemode"`
+	Type     string `json:"type"`
+	Card     *Card  `json:"card"`
 }
 
 // TokenClient encapsulates operations for creating and querying tokens using
@@ -25,7 +26,7 @@ type TokenClient struct{}
 // TokenParams encapsulates options for creating a new Card Token.
 type TokenParams struct {
 	//Currency string REMOVED! no longer part of the API
-	Card     *CardParams
+	Card *CardParams
 }
 
 // Creates a single use token that wraps the details of a credit card.
