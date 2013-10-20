@@ -1,6 +1,7 @@
 package stripe
 
 import (
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -31,7 +32,7 @@ type Card struct {
 	AddressCountry    String `json:"address_country,omitempty"`
 	AddressState      String `json:"address_state,omitempty"`
 	AddressZip        String `json:"address_zip,omitempty"`
-	AddressCity       string `json:"address_city"`
+	AddressCity       String `json:"address_city"`
 	AddressLine1Check String `json:"address_line1_check,omitempty"`
 	AddressZipCheck   String `json:"address_zip_check,omitempty"`
 	CVCCheck          String `json:"cvc_check,omitempty"`
@@ -68,6 +69,19 @@ type CardParams struct {
 
 	// (Optional) Billing address zip code
 	AddressZip string
+}
+
+// CardClient encapsulates operations for creating, updating, deleting and
+// querying cards using the Stripe REST API.
+type CardClient struct{}
+
+func (self *CardClient) Create(c *CardParams, customerId string) (*Card, error) {
+	card := Card{}
+	values := url.Values{}
+	appendCardParamsToValues(c, &values)
+
+	err := query("POST", "/v1/customers/"+customerId+"/cards", values, &card)
+	return &card, err
 }
 
 // IsLuhnValid uses the Luhn Algorithm (also known as the Mod 10 algorithm) to

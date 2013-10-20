@@ -67,6 +67,18 @@ type CustomerParams struct {
 	// (Optional) UTC integer timestamp representing the end of the trial period
 	// the customer will get before being charged for the first time.
 	TrialEnd int64
+
+	// (Optional) An integer amount in cents that is the starting account
+	// balance for your customer.
+	AccountBalance int64
+
+	// (Optional) A set of key/value pairs that you can attach to a customer
+	// object.
+	Metadata map[string]string
+
+	// (Optional) The quantity you’d like to apply to the subscription you’re
+	// creating.
+	Quantity int64
 }
 
 // CustomerClient encapsulates operations for creating, updating, deleting and
@@ -167,6 +179,17 @@ func appendCustomerParamsToValues(c *CustomerParams, values *url.Values) {
 	}
 	if c.TrialEnd != 0 {
 		values.Add("trial_end", strconv.FormatInt(c.TrialEnd, 10))
+	}
+	if c.AccountBalance != 0 {
+		values.Add("account_balance", strconv.FormatInt(c.AccountBalance, 10))
+	}
+	if c.Quantity != 0 {
+		values.Add("quantity", strconv.FormatInt(c.Quantity, 10))
+	}
+
+	// add metadata, if specified
+	for k, v := range c.Metadata {
+		values.Add("metadata["+k+"]", v)
 	}
 
 	// add optional credit card details, if specified
