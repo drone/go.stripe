@@ -84,6 +84,14 @@ func (self *CardClient) Create(c *CardParams, customerId string) (*Card, error) 
 	return &card, err
 }
 
+func (self *CardClient) Delete(cardId string, customerId string) (*DeleteResp, error) {
+	delResponse := DeleteResp{}
+	values := url.Values{}
+
+	err := query("DELETE", "/v1/customers/"+customerId+"/cards/"+cardId, values, &delResponse)
+	return &delResponse, err
+}
+
 // IsLuhnValid uses the Luhn Algorithm (also known as the Mod 10 algorithm) to
 // verify a credit cards checksum, which helps flag accidental data entry
 // errors.
