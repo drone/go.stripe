@@ -64,7 +64,7 @@ func TestUpdateSubscriptionCard(t *testing.T) {
 	// Create the customer, and defer its deletion
 	cust, _ := Customers.Create(&cust1)
 	defer Customers.Delete(cust.Id)
-	if cust.Card != nil {
+	if cust.Cards.Count != 0 {
 		t.Errorf("Expected Customer to be created with a nil card")
 		return
 	}
@@ -86,9 +86,9 @@ func TestUpdateSubscriptionCard(t *testing.T) {
 		t.Errorf("Expected Quantity %d, got %d", sub2.Quantity, resp.Quantity)
 	}
 
-	// Check to see if the customer's card was added 
+	// Check to see if the customer's card was added
 	cust, _ = Customers.Retrieve(cust.Id)
-	if cust.Card == nil {
+	if cust.Cards.Count == 0 {
 		t.Errorf("Expected Subscription to assign a new active customer card")
 	}
 }
@@ -97,7 +97,7 @@ func TestUpdateSubscriptionToken(t *testing.T) {
 	// Create the customer, and defer its deletion
 	cust, _ := Customers.Create(&cust1)
 	defer Customers.Delete(cust.Id)
-	if cust.Card != nil {
+	if cust.Cards.Count != 0 {
 		t.Errorf("Expected Customer to be created with a nil card")
 		return
 	}
@@ -116,9 +116,9 @@ func TestUpdateSubscriptionToken(t *testing.T) {
 		t.Errorf("Expected Subscription with Token, got error %s", err.Error())
 	}
 
-	// Check to see if the customer's card was added 
+	// Check to see if the customer's card was added
 	cust, _ = Customers.Retrieve(cust.Id)
-	if cust.Card == nil {
+	if cust.Cards.Count == 0 {
 		t.Errorf("Expected Subscription to assign a new active customer card")
 	}
 }
@@ -169,11 +169,11 @@ func TestCancelSubscriptionAtPeriodEnd(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected Subscription Cancellation, got error %s", err.Error())
 	}
-	
+
 	if subs.Status != SubscriptionActive {
 		t.Errorf("Expected Subscription Status %s, got %s", SubscriptionCanceled, subs.Status)
 	}
-	
+
 	if subs.CancelAtPeriodEnd != true {
 		t.Errorf("Expected CancelAtPeriodEnd to be %s, got %s", true, subs.CancelAtPeriodEnd)
 	}

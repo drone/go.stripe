@@ -92,12 +92,12 @@ func TestCreateCustomerToken(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected Create Customer, got Error %s", err.Error())
 	}
-	if resp.Card == nil {
+	if resp.Cards.Count == 0 {
 		t.Errorf("Expected Customer Card from Token, got nil")
 	}
 	// Sanity check to make sure card was attached to customer
-	if string(resp.Card.Name) != string(token.Card.Name) {
-		t.Errorf("Expected Card Name %s, got %v", token.Card.Name, resp.Card.Name)
+	if string(resp.Cards.Data[0].Name) != string(token.Card.Name) {
+		t.Errorf("Expected Card Name %s, got %v", token.Card.Name, resp.Cards.Data[0].Name)
 	}
 }
 
@@ -130,25 +130,25 @@ func TestRetrieveCustomer(t *testing.T) {
 	if string(cust.Desc) != cust2.Desc {
 		t.Errorf("Expected Customer Desc %s, got %v", cust2.Desc, cust.Desc)
 	}
-	if cust.Card == nil {
+	if cust.Cards.Count == 0 {
 		t.Errorf("Expected Credit Card %s, got nil", cust2.Card.Number)
 		return
 	}
 
-	if string(cust.Card.Name) != cust2.Card.Name {
-		t.Errorf("Expected Card Name %s, got %s", cust2.Card.Name, cust.Card.Name)
+	if string(cust.Cards.Data[0].Name) != cust2.Card.Name {
+		t.Errorf("Expected Card Name %s, got %s", cust2.Card.Name, cust.Cards.Data[0].Name)
 	}
-	if cust.Card.Last4 != "4242" {
-		t.Errorf("Expected Card Last4 %d, got %d", "4242", cust.Card.Last4)
+	if cust.Cards.Data[0].Last4 != "4242" {
+		t.Errorf("Expected Card Last4 %d, got %d", "4242", cust.Cards.Data[0].Last4)
 	}
-	if cust.Card.ExpYear != cust2.Card.ExpYear {
-		t.Errorf("Expected Card ExpYear %d, got %d", cust2.Card.ExpYear, cust.Card.ExpYear)
+	if cust.Cards.Data[0].ExpYear != cust2.Card.ExpYear {
+		t.Errorf("Expected Card ExpYear %d, got %d", cust2.Card.ExpYear, cust.Cards.Data[0].ExpYear)
 	}
-	if cust.Card.ExpMonth != cust2.Card.ExpMonth {
-		t.Errorf("Expected Card ExpMonth %d, got %d", cust2.Card.ExpMonth, cust.Card.ExpMonth)
+	if cust.Cards.Data[0].ExpMonth != cust2.Card.ExpMonth {
+		t.Errorf("Expected Card ExpMonth %d, got %d", cust2.Card.ExpMonth, cust.Cards.Data[0].ExpMonth)
 	}
-	if cust.Card.Type != Visa {
-		t.Errorf("Expected Card Type %s, got %s", Visa, cust.Card.Type)
+	if cust.Cards.Data[0].Type != Visa {
+		t.Errorf("Expected Card Type %s, got %s", Visa, cust.Cards.Data[0].Type)
 	}
 }
 
@@ -203,7 +203,7 @@ func TestListCustomers(t *testing.T) {
 		t.Errorf("Expected Customer List, got Error %s", err.Error())
 	}
 
-	// since we added 2 dummy customers, we expect the array to be a size of 2 
+	// since we added 2 dummy customers, we expect the array to be a size of 2
 	if len(customers) != 2 {
 		t.Errorf("Expected 2 Customers, got %s", len(customers))
 	}

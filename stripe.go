@@ -21,7 +21,7 @@ var _key string
 // the default URL for all Stripe API requests
 var _url string = "https://api.stripe.com"
 
-const apiVersion = "2013-02-13"
+const apiVersion = "2013-08-13"
 
 // SetUrl will override the default Stripe API URL. This is primarily used
 // for unit testing.

@@ -88,7 +88,7 @@ func TestCreateChargeCustomer(t *testing.T) {
 	// This customer should have a credit card setup
 	cust, _ := Customers.Create(&cust4)
 	defer Customers.Delete(cust.Id)
-	if cust.Card == nil {
+	if cust.Cards.Count == 0 {
 		t.Errorf("Cannot test charging a customer with no pre-defined Card")
 		return
 	}
