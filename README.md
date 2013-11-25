@@ -65,16 +65,16 @@ Note: the amount charged is $4.00, but is specified in cents (400 cents == $4)
 
 ## Documentation
 
-* [Customers](https://github.com/bradrydzewski/go.stripe/wiki/Customers)
-* [Charges](https://github.com/bradrydzewski/go.stripe/wiki/Charges)
-* [Coupons](https://github.com/bradrydzewski/go.stripe/wiki/Coupons)
-* [Invoices](https://github.com/bradrydzewski/go.stripe/wiki/Invoices)
-* [Invoice Items](https://github.com/bradrydzewski/go.stripe/wiki/Invoice-Items)
-* [Plans](https://github.com/bradrydzewski/go.stripe/wiki/Plans)
-* [Subscriptions](https://github.com/bradrydzewski/go.stripe/wiki/Subscriptions)
-* [Tokens](https://github.com/bradrydzewski/go.stripe/wiki/Tokens)
+* [Customers](https://github.com/drone/go.stripe/wiki/Customers)
+* [Charges](https://github.com/drone/go.stripe/wiki/Charges)
+* [Coupons](https://github.com/drone/go.stripe/wiki/Coupons)
+* [Invoices](https://github.com/drone/go.stripe/wiki/Invoices)
+* [Invoice Items](https://github.com/drone/go.stripe/wiki/Invoice-Items)
+* [Plans](https://github.com/drone/go.stripe/wiki/Plans)
+* [Subscriptions](https://github.com/drone/go.stripe/wiki/Subscriptions)
+* [Tokens](https://github.com/drone/go.stripe/wiki/Tokens)
 
-You can also have a look at the [Godocs](http://gopkgdoc.appspot.com/pkg/github.com/bradrydzewski/go.stripe).
+You can also have a look at the [Godocs](http://gopkgdoc.appspot.com/pkg/github.com/drone/go.stripe).
 
 ## Unit Tests
 
