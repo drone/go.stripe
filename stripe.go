@@ -125,21 +125,6 @@ func query(method, path string, values url.Values, v interface{}) error {
 	return json.Unmarshal(body, v)
 }
 
-// Error encapsulates an error returned by the Stripe REST API.
-type Error struct {
-	Code   int
-	Detail struct {
-		Code    string `json:"code"`
-		Message string `json:"message"`
-		Param   string `json:"param"`
-		Type    string `json:"type"`
-	} `json:"error"`
-}
-
-func (e *Error) Error() string {
-	return e.Detail.Message
-}
-
 // Response to a Deletion request.
 type DeleteResp struct {
 	// ID of the Object that was deleted

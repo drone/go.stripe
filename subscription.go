@@ -110,12 +110,12 @@ func (self *SubscriptionClient) Cancel(customerId string) (*Subscription, error)
 }
 
 // Cancels the customer's subscription at the end of the billing period.
-// 
+//
 // see https://stripe.com/docs/api#cancel_subscription
 func (self *SubscriptionClient) CancelAtPeriodEnd(customerId string) (*Subscription, error) {
 	values := url.Values{}
 	values.Add("at_period_end", "true")
-	
+
 	s := Subscription{}
 	path := "/v1/customers/" + url.QueryEscape(customerId) + "/subscription"
 	err := query("DELETE", path, values, &s)

@@ -33,7 +33,7 @@ type CouponClient struct{}
 // CouponParams encapsulates options for creating a new Coupon.
 type CouponParams struct {
 	// (Optional) Unique string of your choice that will be used to identify
-	// this coupon when applying it a customer. 
+	// this coupon when applying it a customer.
 	Id string
 
 	// A positive integer between 1 and 100 that represents the discount the
