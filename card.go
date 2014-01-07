@@ -1,7 +1,6 @@
 package stripe
 
 import (
-	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -94,7 +93,6 @@ func (self *CardClient) Create(c *CardParams, customerId string) (*Card, error) 
 }
 
 func (self *CardClient) Delete(cardId string, customerId string) (*DeleteResp, error) {
-	fmt.Println(customerId, cardId)
 	delResponse := DeleteResp{}
 	values := url.Values{}
 	err := query("DELETE", "/v1/customers/"+customerId+"/cards/"+cardId, values, &delResponse)
