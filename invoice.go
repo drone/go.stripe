@@ -22,7 +22,7 @@ type Invoice struct {
 	Subtotal        int64         `json:"subtotal"`
 	Total           int64         `json:"total"`
 	Charge          String        `json:"charge"`
-	Customer        string        `json:"closed"`
+	Customer        string        `json:"customer"`
 	Date            int64         `json:"date"`
 	Discount        *Discount     `json:"discount"`
 	Lines           *InvoiceLines `json:"lines"`
