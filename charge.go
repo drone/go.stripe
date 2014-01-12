@@ -53,7 +53,8 @@ type ChargeParams struct {
 	// The minimum amount is 50 cents.
 	Amount int64
 
-	// 3-letter ISO code for currency. Currently, only 'usd' is supported.
+	// 3-letter ISO code for currency. Refer to the Stripe docs for currently
+	// supported currencies: https://support.stripe.com/questions/which-currencies-does-stripe-support
 	Currency string
 
 	// (Optional) Either customer or card is required, but not both The ID of an

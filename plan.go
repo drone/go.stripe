@@ -21,6 +21,7 @@ type Plan struct {
 	Name            string `json:"name"`
 	Amount          int64  `json:"amount"`
 	Interval        string `json:"interval"`
+	IntervalCount   int    `json:"interval_count"`
 	Currency        string `json:"currency"`
 	TrialPeriodDays Int    `json:"trial_period_days"`
 	Livemode        bool   `json:"livemode"`

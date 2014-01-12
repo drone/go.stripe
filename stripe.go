@@ -25,6 +25,8 @@ var _key string
 // the default URL for all Stripe API requests
 var _url string = "https://api.stripe.com"
 
+const apiVersion = "2013-08-13"
+
 // SetUrl will override the default Stripe API URL. This is primarily used
 // for unit testing.
 func SetUrl(url string) {
@@ -102,6 +104,8 @@ func (client *Client) query(method, path string, values url.Values, v interface{
 		return err
 	}
 
+	req.Header.Set("Stripe-Version", apiVersion)
+
 	// submit the http request
 	r, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -130,21 +134,6 @@ func (client *Client) query(method, path string, values url.Values, v interface{
 
 	//parse the JSON response into the response object
 	return json.Unmarshal(body, v)
-}
-
-// Error encapsulates an error returned by the Stripe REST API.
-type Error struct {
-	Code   int
-	Detail struct {
-		Code    string `json:"code"`
-		Message string `json:"message"`
-		Param   string `json:"param"`
-		Type    string `json:"type"`
-	} `json:"error"`
-}
-
-func (e *Error) Error() string {
-	return e.Detail.Message
 }
 
 // Response to a Deletion request.

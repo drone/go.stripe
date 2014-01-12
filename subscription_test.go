@@ -64,7 +64,7 @@ func TestUpdateSubscriptionCard(t *testing.T) {
 	// Create the customer, and defer its deletion
 	cust, _ := Customers.Create(&cust1)
 	defer Customers.Delete(cust.Id)
-	if cust.Card != nil {
+	if cust.Cards.Count != 0 {
 		t.Errorf("Expected Customer to be created with a nil card")
 		return
 	}
@@ -88,7 +88,7 @@ func TestUpdateSubscriptionCard(t *testing.T) {
 
 	// Check to see if the customer's card was added
 	cust, _ = Customers.Retrieve(cust.Id)
-	if cust.Card == nil {
+	if cust.Cards.Count == 0 {
 		t.Errorf("Expected Subscription to assign a new active customer card")
 	}
 }
@@ -97,7 +97,7 @@ func TestUpdateSubscriptionToken(t *testing.T) {
 	// Create the customer, and defer its deletion
 	cust, _ := Customers.Create(&cust1)
 	defer Customers.Delete(cust.Id)
-	if cust.Card != nil {
+	if cust.Cards.Count != 0 {
 		t.Errorf("Expected Customer to be created with a nil card")
 		return
 	}
@@ -118,7 +118,7 @@ func TestUpdateSubscriptionToken(t *testing.T) {
 
 	// Check to see if the customer's card was added
 	cust, _ = Customers.Retrieve(cust.Id)
-	if cust.Card == nil {
+	if cust.Cards.Count == 0 {
 		t.Errorf("Expected Subscription to assign a new active customer card")
 	}
 }
