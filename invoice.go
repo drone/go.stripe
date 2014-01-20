@@ -16,6 +16,7 @@ type Invoice struct {
 	AttemptCount    int           `json:"attempt_count"`
 	Attempted       bool          `json:"attempted"`
 	Closed          bool          `json:"closed"`
+	Currency        string        `json:"currency"`
 	Paid            bool          `json:"paid"`
 	PeriodEnd       int64         `json:"period_end"`
 	PeriodStart     int64         `json:"period_start"`
