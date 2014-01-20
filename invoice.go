@@ -33,17 +33,22 @@ type Invoice struct {
 	Livemode        bool          `json:"livemode"`
 }
 
-// InvoiceLines represents an individual line items that is part of an invoice.
 type InvoiceLines struct {
-	InvoiceItems  []*InvoiceItem      `json:"invoiceitems"`
-	Prorations    []*InvoiceItem      `json:"prorations"`
-	Subscriptions []*SubscriptionItem `json:"subscriptions"`
+	Data []*InvoiceLine `json:"data"`
 }
 
-type SubscriptionItem struct {
-	Amount int64   `json:"amount"`
-	Period *Period `json:"period"`
-	Plan   *Plan   `json:"plan"`
+type InvoiceLine struct {
+	Id          string  `json:"id"`
+	Object      string  `json:"object"`
+	Type        string  `json:"type"`
+	Livemode    bool    `json:"livemode"`
+	Amount      int64   `json:"amount"`
+	Currency    string  `json:"currency"`
+	Proration   bool    `json:"proration"`
+	Period      *Period `json:"period"`
+	Quantity    int64   `json:"quantity"`
+	Plan        *Plan   `json:"plan"`
+	Description string  `json:"description"`
 }
 
 type Period struct {
