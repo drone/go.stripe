@@ -34,7 +34,10 @@ type Invoice struct {
 }
 
 type InvoiceLines struct {
-	Data []*InvoiceLine `json:"data"`
+	Object string         `json:"object"`
+	Data   []*InvoiceLine `json:"data"`
+	Count  int            `json:"count"`
+	URL    string         `json:"url"`
 }
 
 type InvoiceLine struct {
