@@ -73,14 +73,16 @@ type CardParams struct {
 
 // CardClient encapsulates operations for creating, updating, deleting and
 // querying cards using the Stripe REST API.
-type CardClient struct{}
+type CardClient struct {
+	Client
+}
 
 func (self *CardClient) Create(c *CardParams, customerId string) (*Card, error) {
 	card := Card{}
 	values := url.Values{}
 	appendCardParamsToValues(c, &values)
 
-	err := query("POST", "/v1/customers/"+customerId+"/cards", values, &card)
+	err := self.query("POST", "/v1/customers/"+customerId+"/cards", values, &card)
 	return &card, err
 }
 
@@ -88,7 +90,7 @@ func (self *CardClient) Delete(cardId string, customerId string) (*DeleteResp, e
 	delResponse := DeleteResp{}
 	values := url.Values{}
 
-	err := query("DELETE", "/v1/customers/"+customerId+"/cards/"+cardId, values, &delResponse)
+	err := self.query("DELETE", "/v1/customers/"+customerId+"/cards/"+cardId, values, &delResponse)
 	return &delResponse, err
 }
 
