@@ -21,22 +21,23 @@ const (
 //
 // see https://stripe.com/docs/api#charge_object
 type Charge struct {
-	Id             string        `json:"id"`
-	Desc           String        `json:"description"`
-	Amount         int64         `json:"amount"`
-	Card           *Card         `json:"card"`
-	Currency       string        `json:"currency"`
-	Created        int64         `json:"created"`
-	Customer       String        `json:"customer"`
-	Invoice        String        `json:"invoice"`
-	Fee            int64         `json:"fee"`
-	Paid           bool          `json:"paid"`
-	Details        []*FeeDetails `json:"fee_details"`
-	Refunded       bool          `json:"refunded"`
-	AmountRefunded Int64         `json:"amount_refunded"`
-	FailureMessage String        `json:"failure_message"`
-	Disputed       bool          `json:"disputed"`
-	Livemode       bool          `json:"livemode"`
+	Id             string            `json:"id"`
+	Desc           String            `json:"description"`
+	Amount         int64             `json:"amount"`
+	Card           *Card             `json:"card"`
+	Currency       string            `json:"currency"`
+	Created        int64             `json:"created"`
+	Customer       String            `json:"customer"`
+	Invoice        String            `json:"invoice"`
+	Fee            int64             `json:"fee"`
+	Paid           bool              `json:"paid"`
+	Details        []*FeeDetails     `json:"fee_details"`
+	Refunded       bool              `json:"refunded"`
+	AmountRefunded Int64             `json:"amount_refunded"`
+	FailureMessage String            `json:"failure_message"`
+	Disputed       bool              `json:"disputed"`
+	Livemode       bool              `json:"livemode"`
+	Metadata       map[string]string `json:"metadata"`
 }
 
 // FeeDetails represents a single fee associated with a Charge.
@@ -71,6 +72,12 @@ type ChargeParams struct {
 	// displayed when in the web interface alongside the charge. It's often a
 	// good idea to use an email address as a description for tracking later.
 	Desc string
+
+	// (Optional) A set of key/value pairs that you can attach to a charge object.
+	// It can be useful for storing additional information about the customer in a
+	// structured format. It's often a good idea to store an email address in
+	// metadata for tracking later.
+	Metadata map[string]string
 }
 
 // ChargeClient encapsulates operations for creating, updating, deleting and
@@ -86,6 +93,11 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 		"amount":      {strconv.FormatInt(params.Amount, 10)},
 		"currency":    {params.Currency},
 		"description": {params.Desc},
+	}
+
+	// add metadata
+	for k, v := range params.Metadata {
+		values.Add("metadata["+k+"]", v)
 	}
 
 	// add optional credit card details, if specified
