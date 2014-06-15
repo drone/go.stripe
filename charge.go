@@ -38,6 +38,7 @@ type Charge struct {
 	Disputed             bool          `json:"disputed"`
 	Livemode             bool          `json:"livemode"`
 	StatementDescription string        `json:"statement_description"`
+	ReceiptEmail         string        `json:"receipt_email"`
 }
 
 // FeeDetails represents a single fee associated with a Charge.
@@ -82,6 +83,12 @@ type ChargeParams struct {
 	// banks display this information consistently, some may display it
 	// incorrectly or not at all.
 	StatementDescription string
+
+	// Receipts are only sent when the payment succeeds. Any `receipt_email`
+	// passed in will override a customer's default email. Emails still will
+	// not be sent in test mode, though live mode `receipt_email`s will ignore
+	// the merchant's customer email settings.
+	ReceiptEmail string
 }
 
 // ChargeClient encapsulates operations for creating, updating, deleting and
