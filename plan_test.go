@@ -78,8 +78,8 @@ func TestCreatePlan(t *testing.T) {
 	_, err = Plans.Create(&p3)
 	if err == nil {
 		t.Error("Expected non-null Error when using an Invalid Currency.")
-	} else if strings.HasPrefix(err.Error(), "Invalid currency: XXX.") == false {
-		t.Errorf("Expected %s, got %s", "Invalid currency: XXX.", err.Error())
+	} else if strings.HasPrefix(err.Error(), "Invalid currency: xxx.") == false {
+		t.Errorf("Expected %s, got %s", "Invalid currency: xxx.", err.Error())
 	}
 }
 
