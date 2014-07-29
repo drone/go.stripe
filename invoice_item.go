@@ -10,14 +10,21 @@ import (
 //
 // see https://stripe.com/docs/api#invoiceitem_object
 type InvoiceItem struct {
-	Id       string `json:"id"`
-	Amount   int64  `json:"amount"`
-	Currency string `json:"currency"`
-	Customer string `json:"customer"`
-	Date     int64  `json:"date"`
-	Desc     String `json:"description"`
-	Invoice  String `json:"invoice"`
-	Livemode bool   `json:"livemode"`
+	Id        string  `json:"id"`
+	Amount    int64   `json:"amount"`
+	Currency  string  `json:"currency"`
+	Desc      String  `json:"description"`
+	Invoice   String  `json:"invoice"`
+	Livemode  bool    `json:"livemode"`
+	Proration bool    `json:"proration"`
+	Period    *Period `json:"period"`
+	Quantity  int64   `json:"quantity"`
+	Plan      *Plan   `json:"plan"`
+}
+
+type Period struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
 }
 
 // InvoiceItemParams encapsulates options for creating a new Invoice Items.

@@ -25,6 +25,7 @@ type Plan struct {
 	Currency        string `json:"currency"`
 	TrialPeriodDays Int    `json:"trial_period_days"`
 	Livemode        bool   `json:"livemode"`
+	Created         int64  `json:"created"`
 }
 
 // PlanClient encapsulates operations for creating, updating, deleting and

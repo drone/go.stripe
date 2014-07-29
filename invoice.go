@@ -34,20 +34,10 @@ type Invoice struct {
 
 // InvoiceLines represents an individual line items that is part of an invoice.
 type InvoiceLines struct {
-	InvoiceItems  []*InvoiceItem      `json:"invoiceitems"`
-	Prorations    []*InvoiceItem      `json:"prorations"`
-	Subscriptions []*SubscriptionItem `json:"subscriptions"`
-}
-
-type SubscriptionItem struct {
-	Amount int64   `json:"amount"`
-	Period *Period `json:"period"`
-	Plan   *Plan   `json:"plan"`
-}
-
-type Period struct {
-	Start int64 `json:"start"`
-	End   int64 `json:"end"`
+	Data   []*InvoiceItem `json:"data"`
+	Count  int64          `json:"count"`
+	Object string         `json:"object"`
+	Url    string         `json:"url"`
 }
 
 // InvoiceClient encapsulates operations for querying invoices using the Stripe
