@@ -73,15 +73,21 @@ type ChargeParams struct {
 	// good idea to use an email address as a description for tracking later.
 	Desc string
 
-	// An arbitrary string to be displayed alongside your company name on your
-	// customer's credit card statement. This may be up to 15 characters. As an
-	// example, if your website is RunClub and you specify 5K Race Ticket, the
-	// user will see:
+	// (Optional) An arbitrary string to be displayed alongside your company
+	// name on your customer's credit card statement. This may be up to 15
+	// characters. As an example, if your website is RunClub and you specify 5K
+	// Race Ticket, the user will see:
 	//     RUNCLUB 5K RACE TICKET.
 	// The statement description may not include <>"' characters. While most
 	// banks display this information consistently, some may display it
 	// incorrectly or not at all.
 	StatementDescription string
+
+	// With Stripe Connect, you can collect a transaction fee from your users
+	// every time you make a charge on their behalf. This is only valid when
+	// using Stripe connect.
+	// The application fee should be in cents, ie. $1.00 = 100
+	ApplicationFee int64
 }
 
 // ChargeClient encapsulates operations for creating, updating, deleting and
@@ -112,6 +118,11 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 	// add optional statment description, if specified
 	if params.StatementDescription != "" {
 		values.Add("statement_description", params.StatementDescription)
+	}
+
+	// add optional application_fee (for stripe connect), if specified
+	if params.ApplicationFee > 0 {
+		values.Add("application_fee", params.ApplicationFee)
 	}
 
 	err := query("POST", "/v1/charges", values, &charge)
