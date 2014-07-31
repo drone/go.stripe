@@ -122,7 +122,7 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 
 	// add optional application_fee (for stripe connect), if specified
 	if params.ApplicationFee > 0 {
-		values.Add("application_fee", params.ApplicationFee)
+		values.Add("application_fee", strconv.FormatInt(params.ApplicationFee, 10))
 	}
 
 	err := query("POST", "/v1/charges", values, &charge)
