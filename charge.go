@@ -21,23 +21,24 @@ const (
 //
 // see https://stripe.com/docs/api#charge_object
 type Charge struct {
-	Id             string            `json:"id"`
-	Desc           String            `json:"description"`
-	Amount         int64             `json:"amount"`
-	Card           *Card             `json:"card"`
-	Currency       string            `json:"currency"`
-	Created        int64             `json:"created"`
-	Customer       String            `json:"customer"`
-	Invoice        String            `json:"invoice"`
-	Fee            int64             `json:"fee"`
-	Paid           bool              `json:"paid"`
-	Details        []*FeeDetails     `json:"fee_details"`
-	Refunded       bool              `json:"refunded"`
-	AmountRefunded Int64             `json:"amount_refunded"`
-	FailureMessage String            `json:"failure_message"`
-	Disputed       bool              `json:"disputed"`
-	Livemode       bool              `json:"livemode"`
-	Metadata       map[string]string `json:"metadata"`
+	Id                   string            `json:"id"`
+	Desc                 String            `json:"description"`
+	Amount               int64             `json:"amount"`
+	Card                 *Card             `json:"card"`
+	Currency             string            `json:"currency"`
+	Created              int64             `json:"created"`
+	Customer             String            `json:"customer"`
+	Invoice              String            `json:"invoice"`
+	Fee                  int64             `json:"fee"`
+	Paid                 bool              `json:"paid"`
+	Details              []*FeeDetails     `json:"fee_details"`
+	Refunded             bool              `json:"refunded"`
+	AmountRefunded       Int64             `json:"amount_refunded"`
+	FailureMessage       String            `json:"failure_message"`
+	Disputed             bool              `json:"disputed"`
+	Livemode             bool              `json:"livemode"`
+	StatementDescription string            `json:"statement_description"`
+	Metadata             map[string]string `json:"metadata"`
 }
 
 // FeeDetails represents a single fee associated with a Charge.
@@ -72,6 +73,16 @@ type ChargeParams struct {
 	// displayed when in the web interface alongside the charge. It's often a
 	// good idea to use an email address as a description for tracking later.
 	Desc string
+
+	// An arbitrary string to be displayed alongside your company name on your
+	// customer's credit card statement. This may be up to 15 characters. As an
+	// example, if your website is RunClub and you specify 5K Race Ticket, the
+	// user will see:
+	//     RUNCLUB 5K RACE TICKET.
+	// The statement description may not include <>"' characters. While most
+	// banks display this information consistently, some may display it
+	// incorrectly or not at all.
+	StatementDescription string
 
 	// (Optional) A set of key/value pairs that you can attach to a charge object.
 	// It can be useful for storing additional information about the customer in a
@@ -108,6 +119,11 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 	} else {
 		// if no credit card is provide we need to specify the customer
 		values.Add("customer", params.Customer)
+	}
+
+	// add optional statment description, if specified
+	if params.StatementDescription != "" {
+		values.Add("statement_description", params.StatementDescription)
 	}
 
 	err := query("POST", "/v1/charges", values, &charge)
