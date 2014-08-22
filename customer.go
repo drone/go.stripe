@@ -52,12 +52,15 @@ type CustomerParams struct {
 	// (Optional) Customer's Active Credit Card
 	Card *CardParams
 
-	// (Optional) Customer's Active Credid Card, using a Card Token
+	// (Optional) Customer's Active Credit Card, using a Card Token
 	Token string
 
 	// (Optional) If you provide a coupon code, the customer will have a
 	// discount applied on all recurring charges.
 	Coupon string
+
+	// (Optional) ID of card to make the customer’s new default for invoice payments
+	DefaultCard string
 
 	// (Optional) The identifier of the plan to subscribe the customer to. If
 	// provided, the returned customer object has a 'subscription' attribute
@@ -173,6 +176,9 @@ func appendCustomerParamsToValues(c *CustomerParams, values *url.Values) {
 	}
 	if c.Coupon != "" {
 		values.Add("coupon", c.Coupon)
+	}
+	if c.DefaultCard != "" {
+		values.Add("default_card", c.DefaultCard)
 	}
 	if c.Plan != "" {
 		values.Add("plan", c.Plan)
