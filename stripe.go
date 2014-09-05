@@ -21,6 +21,8 @@ var _key string
 // the default URL for all Stripe API requests
 var _url string = "https://api.stripe.com"
 
+var _req *http.Request = new(http.Request)
+
 const apiVersion = "2013-08-13"
 
 // SetUrl will override the default Stripe API URL. This is primarily used
@@ -33,6 +35,12 @@ func SetUrl(url string) {
 // API requests.
 func SetKey(key string) {
 	_key = key
+}
+
+// For appengine usage. This allows the current request context to be accessed
+// globally.
+func SetRequest(r *http.Request) {
+	_req = r
 }
 
 // Available APIs
@@ -68,7 +76,6 @@ func query(method, path string, values url.Values, v interface{}) error {
 
 	// set the endpoint for the specific API
 	endpoint.Path = path
-	endpoint.User = url.User(_key)
 
 	// if this is an http GET, add the url.Values to the endpoint
 	if method == "GET" {
@@ -88,15 +95,13 @@ func query(method, path string, values url.Values, v interface{}) error {
 	}
 
 	// create the request
-	req, err := http.NewRequest(method, endpoint.String(), reqBody)
+	req, err := createRequest(method, endpoint, reqBody)
 	if err != nil {
 		return err
 	}
 
-	req.Header.Set("Stripe-Version", apiVersion)
-
 	// submit the http request
-	client := getHttpClient(req)
+	client := getHttpClient(_req)
 	r, err := client.Do(req)
 	if err != nil {
 		return err
