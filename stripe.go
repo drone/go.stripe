@@ -96,7 +96,8 @@ func query(method, path string, values url.Values, v interface{}) error {
 	req.Header.Set("Stripe-Version", apiVersion)
 
 	// submit the http request
-	r, err := http.DefaultClient.Do(req)
+	client := getHttpClient(req)
+	r, err := client.Do(req)
 	if err != nil {
 		return err
 	}
