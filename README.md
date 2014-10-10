@@ -4,7 +4,7 @@
 a simple Credit Card processing library for Go using the Stripe API
 
 ```sh
-go get https://github.com/drone/go.stripe
+go get github.com/drone/go.stripe
 ```
 
 ## Examples
