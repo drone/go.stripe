@@ -16,7 +16,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/drone/go.stripe"
+	"github.com/gardentechno/go.stripe"
 	"html/template"
 	"log"
 	"net/http"

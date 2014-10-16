@@ -16,6 +16,7 @@ type Invoice struct {
 	AttemptCount    int           `json:"attempt_count"`
 	Attempted       bool          `json:"attempted"`
 	Closed          bool          `json:"closed"`
+	Currency        string        `json:"currency"`
 	Paid            bool          `json:"paid"`
 	PeriodEnd       int64         `json:"period_end"`
 	PeriodStart     int64         `json:"period_start"`
@@ -32,17 +33,25 @@ type Invoice struct {
 	Livemode        bool          `json:"livemode"`
 }
 
-// InvoiceLines represents an individual line items that is part of an invoice.
 type InvoiceLines struct {
-	InvoiceItems  []*InvoiceItem      `json:"invoiceitems"`
-	Prorations    []*InvoiceItem      `json:"prorations"`
-	Subscriptions []*SubscriptionItem `json:"subscriptions"`
+	Object string         `json:"object"`
+	Data   []*InvoiceLine `json:"data"`
+	Count  int            `json:"count"`
+	URL    string         `json:"url"`
 }
 
-type SubscriptionItem struct {
-	Amount int64   `json:"amount"`
-	Period *Period `json:"period"`
-	Plan   *Plan   `json:"plan"`
+type InvoiceLine struct {
+	Id          string  `json:"id"`
+	Object      string  `json:"object"`
+	Type        string  `json:"type"`
+	Livemode    bool    `json:"livemode"`
+	Amount      int64   `json:"amount"`
+	Currency    string  `json:"currency"`
+	Proration   bool    `json:"proration"`
+	Period      *Period `json:"period"`
+	Quantity    int64   `json:"quantity"`
+	Plan        *Plan   `json:"plan"`
+	Description string  `json:"description"`
 }
 
 type Period struct {
