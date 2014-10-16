@@ -27,6 +27,9 @@ var (
 			ExpYear:  time.Now().Year() + 1,
 			ExpMonth: 5,
 		},
+		Metadata: map[string]string{
+			"some_order_id": "1234A",
+		},
 	}
 )
 
@@ -53,6 +56,15 @@ func TestCreateCharge(t *testing.T) {
 	}
 	if resp.Paid != true {
 		t.Errorf("Expected Charge was paid, got %v", resp.Paid)
+	}
+	for key, val := range charge1.Metadata {
+		if respVal, ok := resp.Metadata[key]; !ok {
+			t.Errorf("Expected Charge metadata to include %v", key)
+		} else {
+			if respVal != val {
+				t.Errorf("Expected Charge metadata %v:%v, got: %v:%v", key, val, key, respVal)
+			}
+		}
 	}
 }
 
