@@ -15,6 +15,14 @@ func init() {
 
 // Sample Customers to use when creating, deleting, updating Customer data.
 var (
+	// Default card
+	card1 = CardParams{
+		Name:     "John Smith",
+		Number:   "4242424242424242",
+		ExpYear:  time.Now().Year() + 1,
+		ExpMonth: 1,
+	}
+
 	// Customer with only the required fields
 	cust1 = CustomerParams{
 		Email: "test1@test.com",
@@ -27,12 +35,15 @@ var (
 		Desc:   "a 2nd test customer",
 		Coupon: c1.Id,
 		Plan:   p1.Id,
-		Card: &CardParams{
-			Name:     "John Smith",
-			Number:   "4242424242424242",
-			ExpYear:  time.Now().Year() + 1,
-			ExpMonth: 1,
-		},
+		Card:   &card1,
+	}
+
+	// Secondary card we will attempt to set as a customer's default.
+	card2 = CardParams{
+		Name:     "Pocahontas",
+		Number:   "4242424242424242",
+		ExpYear:  time.Now().Year() + 1,
+		ExpMonth: 1,
 	}
 
 	// Another Customer with only the required fields
@@ -45,12 +56,7 @@ var (
 	cust4 = CustomerParams{
 		Email: "test3@test.com",
 		Desc:  "a 3rd test customer",
-		Card: &CardParams{
-			Name:     "John Smith",
-			Number:   "4242424242424242",
-			ExpYear:  time.Now().Year() + 1,
-			ExpMonth: 1,
-		},
+		Card:  &card1,
 	}
 )
 
@@ -165,6 +171,23 @@ func TestUpdateCustomer(t *testing.T) {
 	}
 	if cust.Email != "joe@email.com" {
 		t.Errorf("Expected Updated Customer Email")
+	}
+}
+
+// TestUpdateCustomerDefaultCard tests that we can successfully add another
+// card to a customer and set it as a default.
+func TestUpdateCustomerDefaultCard(t *testing.T) {
+	cusResp, _ := Customers.Create(&cust4)
+	defer Customers.Delete(cusResp.Id)
+	cardResp, _ := Cards.Create(&card2, cusResp.Id)
+	defer Cards.Delete(cardResp.Id, cusResp.Id)
+
+	cust, err := Customers.Update(cusResp.Id, &CustomerParams{DefaultCard: cardResp.Id})
+	if err != nil {
+		t.Errorf("Expected Customer update, got Error %s", err.Error())
+	}
+	if string(cust.DefaultCard) != cardResp.Id {
+		t.Errorf("Expected Updated Default Card %s, got %s", cardResp.Id, cust.DefaultCard)
 	}
 }
 
