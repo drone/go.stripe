@@ -38,6 +38,7 @@ type Charge struct {
 	Disputed             bool          `json:"disputed"`
 	Livemode             bool          `json:"livemode"`
 	StatementDescription string        `json:"statement_description"`
+	ReceiptEmail         string        `json:"receipt_email"`
 }
 
 // FeeDetails represents a single fee associated with a Charge.
@@ -82,6 +83,11 @@ type ChargeParams struct {
 	// banks display this information consistently, some may display it
 	// incorrectly or not at all.
 	StatementDescription string
+
+	// (Optional) Send the customer an email receipt. Needed for one off charges
+	// to email the receipt. Settings on the account will only work for emailing
+	// customers that are created.
+	ReceiptEmail string
 }
 
 // ChargeClient encapsulates operations for creating, updating, deleting and
@@ -109,9 +115,14 @@ func (self *ChargeClient) Create(params *ChargeParams) (*Charge, error) {
 		values.Add("customer", params.Customer)
 	}
 
-	// add optional statment description, if specified
+	// add optional statement description, if specified
 	if params.StatementDescription != "" {
 		values.Add("statement_description", params.StatementDescription)
+	}
+
+	// add optional receipt email address, if specified
+	if params.ReceiptEmail != "" {
+		values.Add("receipt_email", params.ReceiptEmail)
 	}
 
 	err := query("POST", "/v1/charges", values, &charge)
