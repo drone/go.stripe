@@ -37,6 +37,7 @@ func SetKey(key string) {
 
 // Available APIs
 var (
+	Cards         = new(CardClient)
 	Charges       = new(ChargeClient)
 	Coupons       = new(CouponClient)
 	Customers     = new(CustomerClient)

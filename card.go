@@ -75,6 +75,14 @@ type CardParams struct {
 // querying cards using the Stripe REST API.
 type CardClient struct{}
 
+func (self *CardClient) List(customerId string) ([]*Card, error) {
+	values := url.Values{}
+	type listCardsResp struct{ Data []*Card }
+	resp := listCardsResp{}
+	err := query("GET", "/v1/customers/"+customerId+"/cards", values, &resp)
+	return resp.Data, err
+}
+
 func (self *CardClient) Create(c *CardParams, customerId string) (*Card, error) {
 	card := Card{}
 	values := url.Values{}
@@ -87,7 +95,6 @@ func (self *CardClient) Create(c *CardParams, customerId string) (*Card, error) 
 func (self *CardClient) Delete(cardId string, customerId string) (*DeleteResp, error) {
 	delResponse := DeleteResp{}
 	values := url.Values{}
-
 	err := query("DELETE", "/v1/customers/"+customerId+"/cards/"+cardId, values, &delResponse)
 	return &delResponse, err
 }
