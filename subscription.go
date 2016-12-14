@@ -29,7 +29,7 @@ type Subscription struct {
 	TrialEnd           Int64  `json:"trial_end"`
 	CanceledAt         Int64  `json:"canceled_at"`
 	CancelAtPeriodEnd  bool   `json:"cancel_at_period_end"`
-	Quantity           int64  `json"quantity"`
+	Quantity           int64  `json:"quantity"`
 }
 
 // SubscriptionClient encapsulates operations for updating and canceling
